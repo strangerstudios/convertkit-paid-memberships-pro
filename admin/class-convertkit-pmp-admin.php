@@ -157,8 +157,8 @@ class ConvertKit_PMP_Admin {
 	public function add_menu() {
 		// add_options_page( $page_title, $menu_title, $capability, $menu_slug, $callback );
 		add_options_page(
-			apply_filters( $this->plugin_name . '-settings-page-title', __( 'ConvertKit PMP Settings', 'convertkit-pmp' ) ),
-			apply_filters( $this->plugin_name . '-settings-menu-title', __( 'ConvertKit PMP', 'convertkit-pmp' ) ),
+			apply_filters( $this->plugin_name . '-settings-page-title', __( 'ConvertKit Options and Settings', 'convertkit-pmp' ) ),
+			apply_filters( $this->plugin_name . '-settings-menu-title', __( 'PMP ConvertKit', 'convertkit-pmp' ) ),
 			'manage_options',
 			$this->plugin_name,
 			array( $this, 'options_page' )
@@ -370,6 +370,85 @@ class ConvertKit_PMP_Admin {
 		}
 
 		return $option;
+	}
+
+	/**
+	 * Add payment details to ConvertKit when a new payment is completed.
+	 *
+	 * @param int $payment_id
+	 *
+	 * @access public
+	 * @since 1.1
+	 * @return void
+	 */
+	public function insert_payment( $payment_id ) {
+
+		if ( function_exists( 'rcp_log' ) ) {
+			rcp_log( sprintf( 'Attempting to add payment #%d to ConvertKit.', $payment_id ) );
+		}
+
+		$payments         = new RCP_Payments();
+		$payment          = $payments->get_payment( $payment_id );
+		$user             = get_userdata( $payment->user_id );
+		$membership_level = rcp_get_subscription_details( $payment->object_id );
+
+		if ( empty( $payment->transaction_id ) ) {
+			if ( function_exists( 'rcp_log' ) ) {
+				rcp_log( sprintf( 'Not adding payment #%d to ConvertKit - transaction ID is blank.', $payment_id ) );
+			}
+
+			return;
+		}
+
+		$args = array(
+			'api_secret'      => $this->api_secret,
+			'integration_key' => '6rU1haZnJBocLR57XiinAw',
+			'purchase'        => array(
+				'integration'      => 'Restrict Content Pro',
+				'transaction_id'   => $payment->transaction_id,
+				'email_address'    => $user->user_email,
+				'currency'         => rcp_get_currency(),
+				'transaction_time' => $payment->date,
+				'subtotal'         => $payment->subtotal,
+				'discount'         => $payment->discount_amount,
+				'total'            => $payment->amount,
+				'status'           => 'paid',
+				'products'         => array(
+					array(
+						'name'       => $membership_level->name,
+						'pid'        => 'rcp-' . $membership_level->id,
+						'lid'        => 1,
+						'unit_price' => $membership_level->price + $membership_level->fee,
+						'quantity'   => 1
+					)
+				)
+			)
+		);
+
+		$request = wp_remote_post(
+			$this->api_url . 'purchases',
+			array(
+				'body'    => json_encode( $args ),
+				'timeout' => 30,
+				'headers' => array(
+					'Content-Type' => 'application/json'
+				)
+			)
+		);
+
+		if ( is_wp_error( $request ) || 201 != wp_remote_retrieve_response_code( $request ) ) {
+			if ( function_exists( 'rcp_log' ) ) {
+				$error = is_wp_error( $request ) ? $request->get_error_message() : 'unknown';
+				rcp_log( sprintf( 'Error adding payment #%d in ConvertKit: invalid response. Response code: %s; message: %s.', $payment_id, wp_remote_retrieve_response_code( $request ), $error ) );
+
+				return;
+			}
+		}
+
+		if ( function_exists( 'rcp_log' ) ) {
+			rcp_log( sprintf( 'Successfully added payment #%d to ConvertKit.', $payment_id ) );
+		}
+
 	}
 
 }
