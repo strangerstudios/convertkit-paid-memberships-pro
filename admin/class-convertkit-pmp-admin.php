@@ -343,7 +343,7 @@ class ConvertKit_PMP_Admin {
 		$mapping = 'convertkit-mapping-' . $level_id;
 		$tag_id = $this->get_option( $mapping );
 		$user = get_userdata( $user_id );
-		$user_email = $user->user_email;
+		$user_email = urlencode($user->user_email);
 		$user_name = urlencode( $user->first_name . ' ' . $user->last_name );
 
 		if (! empty( $tag_id ) ){
