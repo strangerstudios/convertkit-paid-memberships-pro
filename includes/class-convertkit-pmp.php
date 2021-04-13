@@ -148,7 +148,9 @@ class ConvertKit_PMP {
 		$this->loader->add_filter( 'plugin_action_links_convertkit-paid-memberships-pro/convertkit-pmp.php' , $plugin_admin, 'settings_link' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_menu' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
-		$this->loader->add_action( 'pmpro_before_change_membership_level', $plugin_admin, 'change_membership_level', 10, 2 );
+		$this->loader->add_action( 'pmpro_after_change_membership_level', $plugin_admin, 'change_membership_level', 10, 3 );
+		$this->loader->add_action( 'pmpro_after_checkout', $plugin_admin, 'after_checkout', 10, 2 );
+		$this->loader->add_action( 'plugin_row_meta', $plugin_admin, 'plugin_row_meta', 10, 2 );
 
 	}
 

@@ -1,1 +1,205 @@
+[13-04-2021 16:20:36] Request url: https://api.convertkit.com/v3/tags/2307112/subscribe?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 16:20:36] Request args: Array
+(
+    [first_name] => Pauline Chapman
+    [email] => kim+Pauline.Chapman@domain.com
+)
 
+[13-04-2021 16:20:37] Request url: https://api.convertkit.com/v3/purchases
+[13-04-2021 16:20:37] Request args: Array
+(
+    [api_secret] => LxzI305F4FS2ibl_pric3fX3KpWV40lOCsAdPWJxCRs
+    [integration_key] => slxewn3xiWdPSTkLXKo2lQ
+    [purchase] => Array
+        (
+            [integration] => Paid Memberships Pro
+            [transaction_id] => 0ADC1838CC
+            [email_address] => kim+Pauline.Chapman@domain.com
+            [currency] => USD
+            [transaction_time] => 2021-04-13 16:20:36
+            [subtotal] => 0
+            [total] => 0
+            [status] => paid
+            [products] => Array
+                (
+                    [0] => Array
+                        (
+                            [pid] => pmpro-7
+                            [lid] => 1
+                            [name] => Test
+                            [unit_price] => 0
+                            [quantity] => 1
+                        )
+
+                )
+
+        )
+
+)
+
+[13-04-2021 16:32:59] Request url: https://api.convertkit.com/v3/tags?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 16:32:59] Request url: 
+[13-04-2021 16:33:19] Request url: 
+[13-04-2021 16:33:21] Request url: 
+[13-04-2021 19:53:36] Request url: https://api.convertkit.com/v3/tags?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 20:04:39] Request url: https://api.convertkit.com/v3/tags?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 20:17:42] Request url: https://api.convertkit.com/v3/tags?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 20:27:41] Request url: https://api.convertkit.com/v3/tags?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 20:44:34] Request url: https://api.convertkit.com/v3/tags/2307000/subscribe?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 20:44:34] Request args: Array
+(
+    [first_name] => Pauline Chapman
+    [email] => kim+Pauline.Chapman@domain.com
+)
+
+[13-04-2021 20:44:35] Request url: https://api.convertkit.com/v3/purchases
+[13-04-2021 20:44:35] Request args: Array
+(
+    [api_secret] => LxzI305F4FS2ibl_pric3fX3KpWV40lOCsAdPWJxCRs
+    [integration_key] => slxewn3xiWdPSTkLXKo2lQ
+    [purchase] => Array
+        (
+            [integration] => Paid Memberships Pro
+            [transaction_id] => 73A733F04F
+            [email_address] => kim+Pauline.Chapman@domain.com
+            [currency] => USD
+            [transaction_time] => 2021-04-13 20:44:34
+            [subtotal] => 20
+            [total] => 20
+            [status] => paid
+            [products] => Array
+                (
+                    [0] => Array
+                        (
+                            [pid] => pmpro-2
+                            [lid] => 1
+                            [name] => Enhanced
+                            [unit_price] => 20
+                            [quantity] => 1
+                        )
+
+                )
+
+        )
+
+)
+
+[13-04-2021 20:45:20] Request url: https://api.convertkit.com/v3/tags/2307000/subscribe?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 20:45:20] Request args: Array
+(
+    [first_name] => Pauline Chapman
+    [email] => kim+Pauline.Chapman@domain.com
+)
+
+[13-04-2021 20:45:21] Request url: https://api.convertkit.com/v3/purchases
+[13-04-2021 20:45:21] Request args: Array
+(
+    [api_secret] => LxzI305F4FS2ibl_pric3fX3KpWV40lOCsAdPWJxCRs
+    [integration_key] => slxewn3xiWdPSTkLXKo2lQ
+    [purchase] => Array
+        (
+            [integration] => Paid Memberships Pro
+            [transaction_id] => FD3758E93F
+            [email_address] => kim+Pauline.Chapman@domain.com
+            [currency] => USD
+            [transaction_time] => 2021-04-13 20:45:20
+            [subtotal] => 55
+            [total] => 55
+            [status] => paid
+            [products] => Array
+                (
+                    [0] => Array
+                        (
+                            [pid] => pmpro-3
+                            [lid] => 1
+                            [name] => Premium
+                            [unit_price] => 55
+                            [quantity] => 1
+                        )
+
+                )
+
+        )
+
+)
+
+[13-04-2021 20:45:37] Request url: https://api.convertkit.com/v3/tags/2307000/subscribe?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 20:45:37] Request args: Array
+(
+    [first_name] => Pauline Chapman
+    [email] => kim+Pauline.Chapman@domain.com
+)
+
+[13-04-2021 20:45:37] Request url: https://api.convertkit.com/v3/purchases
+[13-04-2021 20:45:37] Request args: Array
+(
+    [api_secret] => LxzI305F4FS2ibl_pric3fX3KpWV40lOCsAdPWJxCRs
+    [integration_key] => slxewn3xiWdPSTkLXKo2lQ
+    [purchase] => Array
+        (
+            [integration] => Paid Memberships Pro
+            [transaction_id] => 2DBBD001AC
+            [email_address] => kim+Pauline.Chapman@domain.com
+            [currency] => USD
+            [transaction_time] => 2021-04-13 20:45:37
+            [subtotal] => 55
+            [total] => 55
+            [status] => paid
+            [products] => Array
+                (
+                    [0] => Array
+                        (
+                            [pid] => pmpro-3
+                            [lid] => 1
+                            [name] => Premium
+                            [unit_price] => 55
+                            [quantity] => 1
+                        )
+
+                )
+
+        )
+
+)
+
+[13-04-2021 20:50:05] Request url: https://api.convertkit.com/v3/tags/2307000/subscribe?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 20:50:05] Request args: Array
+(
+    [first_name] => Pauline Chapman
+    [email] => kim+Pauline.Chapman@domain.com
+)
+
+[13-04-2021 20:50:06] Request url: https://api.convertkit.com/v3/purchases
+[13-04-2021 20:50:06] Request args: Array
+(
+    [api_secret] => LxzI305F4FS2ibl_pric3fX3KpWV40lOCsAdPWJxCRs
+    [integration_key] => slxewn3xiWdPSTkLXKo2lQ
+    [purchase] => Array
+        (
+            [integration] => Paid Memberships Pro
+            [transaction_id] => 6DECB1E7C7
+            [email_address] => kim+Pauline.Chapman@domain.com
+            [currency] => USD
+            [transaction_time] => 2021-04-13 20:50:05
+            [subtotal] => 55
+            [total] => 55
+            [status] => paid
+            [products] => Array
+                (
+                    [0] => Array
+                        (
+                            [pid] => pmpro-3
+                            [lid] => 1
+                            [name] => Premium
+                            [unit_price] => 55
+                            [quantity] => 1
+                        )
+
+                )
+
+        )
+
+)
+
+[13-04-2021 21:09:22] Request url: https://api.convertkit.com/v3/tags?api_key=R4sbpbg69eHT2yRKuvrjWg
+[13-04-2021 21:20:33] Request url: https://api.convertkit.com/v3/tags?api_key=R4sbpbg69eHT2yRKuvrjWg

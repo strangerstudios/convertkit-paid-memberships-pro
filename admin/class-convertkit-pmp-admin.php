@@ -102,6 +102,15 @@ class ConvertKit_PMP_Admin {
 			$this->plugin_name . '-display-options'
 		);
 
+		// add_settings_field( $id, $title, $callback, $menu_slug, $section, $args );
+		add_settings_field(
+			'api-secret-key',
+			apply_filters( $this->plugin_name . '-display-api-ksecret-ey', __( 'API Secret Key', 'convertkit-pmp' ) ),
+			array( $this, 'display_options_api_secret_key' ),
+			$this->plugin_name,
+			$this->plugin_name . '-display-options'
+		);
+
 		// add_settings_section( $id, $title, $callback, $menu_slug );
 		add_settings_section(
 			$this->plugin_name . '-ck-mapping',
@@ -157,14 +166,13 @@ class ConvertKit_PMP_Admin {
 	public function add_menu() {
 		// add_options_page( $page_title, $menu_title, $capability, $menu_slug, $callback );
 		add_options_page(
-			apply_filters( $this->plugin_name . '-settings-page-title', __( 'ConvertKit PMP Settings', 'convertkit-pmp' ) ),
-			apply_filters( $this->plugin_name . '-settings-menu-title', __( 'ConvertKit PMP', 'convertkit-pmp' ) ),
+			apply_filters( $this->plugin_name . '-settings-page-title', __( 'Paid Memberships Pro - ConvertKit Settings', 'convertkit-pmp' ) ),
+			apply_filters( $this->plugin_name . '-settings-menu-title', __( 'PMPro ConvertKit', 'convertkit-pmp' ) ),
 			'manage_options',
 			$this->plugin_name,
 			array( $this, 'options_page' )
 		);
 	}
-
 
 	/**
 	 * Creates the options page
@@ -204,7 +212,7 @@ class ConvertKit_PMP_Admin {
 	 * @return 		mixed 						The settings section
 	 */
 	public function display_options_section( $params ) {
-		echo '<p>' . __( 'Add your API key below and then choose a default form to add subscribers to.','convertkit-pmp') .'</p>';
+		echo '<p>' . __( 'Add your API keys below to connect your ConvertKit account to this membership site.','convertkit-pmp') .'</p>';
 	}
 
 
@@ -216,7 +224,7 @@ class ConvertKit_PMP_Admin {
 	 * @return 		mixed 						The settings section
 	 */
 	public function display_mapping_section( $params ) {
-		echo '<p>' . __( 'Below is a list of the defined PMP Membership Levels. Assign a membership level to a ConvertKit tag that will be assigned to members of that level.','convertkit-pmp') .'</p>';
+		echo '<p>' . __( 'Below is a list of the defined Membership Levels in Paid Memberships Pro. Assign a membership level to a ConvertKit tag that will be assigned to members of that level.','convertkit-pmp') .'</p>';
 	}
 
 
@@ -244,8 +252,22 @@ class ConvertKit_PMP_Admin {
 	public function display_options_api_key() {
 		$api_key = $this->get_option( 'api-key' );
 
-		?><input type="text" id="<?php echo $this->plugin_name; ?>-options[api-key]" name="<?php echo $this->plugin_name; ?>-options[api-key]" value="<?php echo esc_attr( $api_key ); ?>" /><br/>
-		<p class="description"><a href="https://app.convertkit.com/account/edit" target="_blank"><?php echo __( 'Get your ConvertKit API Key', 'convertkit-pmp' ); ?></a></p><?php
+		?><input type="text" id="<?php echo $this->plugin_name; ?>-options[api-key]" name="<?php echo $this->plugin_name; ?>-options[api-key]" value="<?php echo esc_attr( $api_key ); ?>" size="40" /><br/>
+		<p class="description"><?php echo __( 'This field is required to add and tag subscribers in ConvertKit.', 'convertkit-pmp' ); ?> <a href="https://app.convertkit.com/account/edit" target="_blank"><?php echo __( 'Get your ConvertKit API Key', 'convertkit-pmp' ); ?></a></p><?php
+	}
+
+
+	/**
+	 * Creates a settings input for the API secret key.
+	 *
+	 * @since 		1.0.0
+	 * @return 		mixed 			The settings field
+	 */
+	public function display_options_api_secret_key() {
+		$api_secret_key = $this->get_option( 'api-secret-key' );
+
+		?><input type="text" id="<?php echo $this->plugin_name; ?>-options[api-secret-key]" name="<?php echo $this->plugin_name; ?>-options[api-secret-key]" value="<?php echo esc_attr( $api_secret_key ); ?>" size="40" />
+		<p class="description"><?php echo __( 'This field is required to add purchase data to subscribers in ConvertKit.', 'convertkit-pmp' ); ?> <a href="https://app.convertkit.com/account/edit" target="_blank"><?php echo __( 'Get your ConvertKit API Secret Key', 'convertkit-pmp' ); ?></a></p><?php
 	}
 
 
@@ -258,10 +280,16 @@ class ConvertKit_PMP_Admin {
 	 * @return 		mixed 			The settings field
 	 */
 	public function display_options_empty_mapping() {
-		?>
-		<p><?php echo __( 'No PMP Membership Levels have been added yet.', 'converkit-pmp'); ?><br/>
-			<?php echo sprintf( __( 'You can add one <a href="%s">here</a>.', 'converkit-pmp'), get_admin_url( null, '/admin.php?page=pmpro-membershiplevels' ) ); ?></p>
-		<?php
+		if ( ! defined( 'PMPRO_VERSION' ) ) { ?>
+			<p><?php echo __( 'Paid Memberships Pro must be installed and activated to use this integration.', 'converkit-pmp'); ?></p>
+			<?php
+		} else { ?>
+			<p>
+				<?php echo __( 'No Membership Levels have been added yet.', 'converkit-pmp'); ?><br/>
+				<?php echo sprintf( __( 'You can add one <a href="%s">here</a>.', 'converkit-pmp'), get_admin_url( null, '/admin.php?page=pmpro-membershiplevels' ) ); ?>
+			</p>
+			<?php
+		}
 	}
 
 
@@ -273,9 +301,9 @@ class ConvertKit_PMP_Admin {
 	 */
 	public function display_options_convertkit_mapping( $args ) {
 
-		$option_name = 'convertkit-mapping-' . $args['key'];
-		$tag         = $this->get_option( $option_name );
-		$api_key     = $this->get_option( 'api-key' );
+		$option_name 	= 'convertkit-mapping-' . $args['key'];
+		$tag         	= $this->get_option( $option_name );
+		$api_key     	= $this->get_option( 'api-key' );
 
 		if ( empty( $api_key ) ) {
 			?><p><?php echo __( 'Enter API key to retrieve list of tags.', 'convertkit-pmp' ); ?></p><?php
@@ -303,14 +331,19 @@ class ConvertKit_PMP_Admin {
 	 *
 	 * Helper function to get member levels from PMP database.
 	 * This is patterned on PMP's `membershiplevels.php` file.
-	 * @see https://github.com/strangerstudios/paid-memberships-pro/blob/dev/adminpages/membershiplevels.php#L526
+	 * @see https://github.com/strangerstudios/paid-memberships-pro/blob/dev/adminpages/membershiplevels.php#L656
 	 *
 	 * @since 1.0.0
 	 * @return array
 	 */
-	public function get_pmp_membership_levels(){
+	public function get_pmp_membership_levels() {
 
 		global $wpdb;
+
+		// Bail if Paid Memberships Pro is not active.
+		if ( ! defined( 'PMPRO_VERSION' ) ) {
+			return;
+		}
 
 		$sqlQuery = "SELECT * FROM $wpdb->pmpro_membership_levels ";
 		$sqlQuery .= "ORDER BY id ASC";
@@ -329,7 +362,7 @@ class ConvertKit_PMP_Admin {
 
 
 	/**
-	 * A change membership level action is occurring in PMP.
+	 * A change membership level action is occurring in Paid Memberships Pro.
 	 *
 	 * If $level == 0 then the user is being removed from a membership.
 	 * If $level is > 0 then the user is being added to level with that ID.
@@ -338,20 +371,79 @@ class ConvertKit_PMP_Admin {
 	 * @param int $level_id
 	 * @param int $user_id
 	 */
-	public function change_membership_level( $level_id, $user_id ) {
+	public function change_membership_level( $level_id, $user_id, $cancel_level ) {
+		// Get the tag IDs to add to this subscriber.
+		$mapping_to_add = 'convertkit-mapping-' . $level_id;
+		$tag_id_to_add = $this->get_option( $mapping_to_add );
 
-		$mapping = 'convertkit-mapping-' . $level_id;
-		$tag_id = $this->get_option( $mapping );
+		// Get the subscriber information.
 		$user = get_userdata( $user_id );
-		$user_email = urlencode($user->user_email);
-		$user_name = urlencode( $user->first_name . ' ' . $user->last_name );
+		$user_email = $user->user_email;
+		$user_name = $user->first_name . ' ' . $user->last_name;
 
-		if (! empty( $tag_id ) ){
-			$this->api->add_tag_to_user( $user_email, $user_name, $tag_id );
+		// Run the API call to add tag to this subscriber.
+		if ( ! empty( $tag_id_to_add ) ) {
+			$this->api->add_tag_to_user( $user_email, $user_name, $tag_id_to_add );
 		}
 
+		/**
+		 * Option to remove other tags for other levels on level change.
+		 *
+		 * @param bool $remove_tags Set to true to remove other tags. Default: false.
+		 * @param int $cancel_level The ID of the level previously held, if available.
+		 * @return bool $remove_tags.
+		 *
+		 */
+		$remove_tags = apply_filters( 'pmpro_convertkit_change_membership_level_remove_tags', false, $cancel_level );
+		
+		if ( ! empty( $remove_tags ) && ! empty( $cancel_level ) ) {
+			// Get the secret API key.
+			$api_secret_key = $this->get_option( 'api-secret-key' );
+
+			// Get the tag IDs to add to remove from  this subscriber.
+			$mapping_to_remove = 'convertkit-mapping-' . $cancel_level;
+			$tag_id_to_remove = $this->get_option( $mapping_to_remove );
+
+			// Run the API call to remove previous level's tag from this subscriber.
+			if ( ! empty ( $tag_id_to_remove ) && ! empty ( $api_secret_key ) ) {
+				$this->api->remove_tag_from_user( $user_email, $api_secret_key, $tag_id_to_remove );
+			}
+		}
 	}
 
+
+	/**		
+ 	 * Add payment details to ConvertKit when a new membership checkout is completed.		
+ 	 *		
+ 	 * @param int $payment_id		
+ 	 *		
+ 	 * @access public		
+ 	 * @since 1.1		
+ 	 * @return void		
+ 	 */		
+ 	public function after_checkout( $user_id, $order ) {		
+
+		// Bail if the order is empty.
+		if ( empty( $order->id ) ) {
+			return;		
+		}
+
+		// Get the user information for this order.
+		$user = get_userdata( $user_id );
+		$user_email = $user->user_email;
+
+		// Get the Membership Level information for this order.
+		$order = new MemberOrder( $order->id );
+		$order->getMembershipLevel();
+
+		// Get the secret API key.
+		$api_secret_key = $this->get_option( 'api-secret-key' );
+
+		// Run the API call to add purchase data.
+		if ( ! empty ( $api_secret_key ) ) {
+			$this->api->create_purchase( $user_email, $api_secret_key, $order );
+		}
+	}
 
 	/**
 	 * Get the setting option requested.
@@ -372,4 +464,23 @@ class ConvertKit_PMP_Admin {
 		return $option;
 	}
 
+
+	/**
+	 * Add links to the plugin row meta
+	 *
+	 * @since   1.1
+	 * @param	$links - Links for plugin
+	 * @param	$file - main plugin filename
+	 * @return	array - Array of links
+	 */
+	public function plugin_row_meta( $links, $file ) {
+		if (strpos($file, 'convertkit-pmp.php') !== false) {
+			$new_links = array(
+				'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/convertkit/') . '" title="' . esc_attr(__( 'View Documentation', 'convertkit-pmp' ) ) . '">' . __('Docs', 'convertkit-pmp') . '</a>',
+				'<a href="' . esc_url('https://www.paidmembershipspro.com/support/') . '" title="' . esc_attr(__('Visit Customer Support Forum', 'convertkit-pmp')) . '">' . __('Support', 'convertkit-pmp') . '</a>',
+			);
+			$links = array_merge($links, $new_links);
+		}
+		return $links;
+	}
 }
