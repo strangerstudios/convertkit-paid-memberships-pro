@@ -7,17 +7,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://www.convertkit.com
- * @since             2.0.0
+ * @link              https://convertkit.com
+ * @since             1.1
  * @package           ConvertKit_PMP
  *
  * @wordpress-plugin
- * Plugin Name:       Paid Memberships Pro ConvertKit Integration
- * Plugin URI:        http://paidmembershipspro.com
- * Description:       This plugin integrates Paid Memberships Pro with ConvertKit.
- * Version:           2.0.0
- * Author:            Paid Memberships Pro
- * Author URI:        https://paidmembershipspro.com
+ * Plugin Name: ConvertKit Paid Memberships Pro Integration
+ * Plugin URI: https://www.paidmembershipspro.com/add-ons/convertkit
+ * Description: Subscribe and tag your Paid Memberships Pro members in ConvertKit.
+ * Version: 1.1
+ * Author: Paid Memberships Pro
+ * Author URI: https://www.paidmembershipspro.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       convertkit-pmp
