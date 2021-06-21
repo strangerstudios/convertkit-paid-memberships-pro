@@ -8,14 +8,14 @@
  * that starts the plugin.
  *
  * @link              http://www.convertkit.com
- * @since             2.0.0
+ * @since             1.0
  * @package           ConvertKit_PMP
  *
  * @wordpress-plugin
  * Plugin Name:       Paid Memberships Pro ConvertKit Integration
  * Plugin URI:        http://paidmembershipspro.com
  * Description:       This plugin integrates Paid Memberships Pro with ConvertKit.
- * Version:           2.0.0
+ * Version:           1.1.0
  * Author:            Paid Memberships Pro
  * Author URI:        https://paidmembershipspro.com
  * License:           GPL-2.0+

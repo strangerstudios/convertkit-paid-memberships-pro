@@ -2,9 +2,9 @@
 Contributors: nathanbarry, growdev
 Donate link: http://convertkit.com/
 Tags: convertkit, email, marketing, pmpro, pmp, paid memberships pro
-Requires at least: 3.0.1
-Tested up to: 4.6.0
-Stable tag: 1.0.2
+Requires at least: 4.0
+Tested up to: 5.7.2
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,13 @@ This plugin integrates ConvertKit with Paid Memberships Pro.
 Yes, for it to work you must first have an account on ConvertKit.com
 
 == Changelog ==
+
+= 1.1 - 2021-06-21 =
+* FEATURE: Updated opt-in settings. You can edit the label shown on the opt-in message at checkout.
+* FEATURE: Added purchase tracking for each level in ConvertKit.
+* ENHANCEMENT: Added assets for GitHub and WordPress.org.
+* BUG FIX: Email addresses and names are now properly URL encoded when passed to ConvertKit.
+* REFACTOR: Updated how the CK API integration works.
 
 = 1.0.2 =
 * Fixed PHP shorttag that was causing PHP parse error.
