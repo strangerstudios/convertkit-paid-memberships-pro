@@ -1,6 +1,5 @@
-=== Plugin Name ===
-Contributors: nathanbarry, growdev
-Donate link: http://convertkit.com/
+=== Paid Memberships Pro ConvertKit Integration ===
+Contributors: strangerstudios, nathanbarry, growdev
 Tags: convertkit, email, marketing, pmpro, pmp, paid memberships pro
 Requires at least: 4.0
 Tested up to: 5.7.2
