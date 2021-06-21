@@ -3,7 +3,7 @@
 /**
  * ConvertKit API specific functionality
  *
- * @link       http://www.convertkit.com
+ * @link       https://convertkit.com
  * @since      1.0.0
  *
  * @package    ConvertKit_PMP
@@ -30,12 +30,8 @@ class ConvertKit_PMP_API {
 	/** @var  string $api_key The customer's ConvertKit API key */
 	protected $api_key;
 
-	/** @var   */
-	protected $forms;
-
 	/** @var  array $tags Tags in the customer's account */
 	protected $tags;
-
 
 	/**
 	 * Initialize the class.
@@ -49,60 +45,57 @@ class ConvertKit_PMP_API {
 
 	}
 
-	/**
-	 * Get an array of forms and IDs from the API
-	 *
-	 * @return mixed
-	 */
-	public function get_forms(){
-
-		$forms = get_transient( 'convertkit_pmp_form_data' );
-
-		if( false === $forms ) {
-			$data = $this->do_api_call( 'forms' );
-
-			if( ! is_wp_error( $data ) ) {
-
-				$forms = $data;
-				set_transient( 'convertkit_pmp_form_data', $forms, 24*24 );
-			}
-		}
-
-		if ( ! empty( $forms ) && isset( $forms['forms'] ) && ! empty( $forms['forms'] ) ) {
-
-			foreach( $forms['forms'] as $key => $form ) {
-				$this->forms[ $form['id'] ] = $form['name'];
-			}
-		}
-
-		return $this->forms;
-
-	}
-
 
 	/**
 	 * Get an array of tags and IDs from the API
 	 *
 	 * @return mixed
 	 */
-	public function get_tags(){
+	public function get_tags() {
 
 		$tags = get_transient( 'convertkit_pmp_tag_data' );
 
-		if( false === $tags || empty( $tags ) ) {
-			$data = $this->do_api_call( 'tags' );
+		if ( false === $tags || empty( $tags ) ) {
 
-			if( ! is_wp_error( $data ) ) {
+			// Get the API key.
+			$api_key = $this->api_key;
+			if ( '' == $api_key ) {
+				return array();
+			}
 
-				$tags = $data;
+			// Build the request URL.
+			$query_args = array();
+			$request_url = $this->api_url . '/' . $this->api_version . '/tags';
+			$query_args['api_key'] = $api_key;
+			$request_url = add_query_arg( $query_args, $request_url );
+
+			// Retrive the data from ConvertKit.
+			$data = wp_remote_get(
+				$request_url,
+				array(
+					'body'    => '',
+					'timeout' => 30,
+					'headers' => array(
+						'Content-Type' => 'application/json'
+					)
+				)
+			);
+
+			if ( ! is_wp_error( $data ) ) {
+				$tags = json_decode( $data['body'] );
+				$tags = $tags->tags;
 				set_transient( 'convertkit_pmp_tag_data', $tags, 24*24 );
 			}
+
+			if ( defined( 'CK_DEBUG') ) {
+				$this->log( "Request url: " . $request_url );
+			}
+
 		}
 
-		if ( ! empty( $tags ) && isset( $tags['tags'] ) && ! empty( $tags['tags'] ) ) {
-
-			foreach( $tags['tags'] as $key => $tag ) {
-				$this->tags[ $tag['id'] ] = $tag['name'];
+		if ( ! empty( $tags ) ) {
+			foreach( $tags as $key => $tag ) {
+				$this->tags[ $tag->id ] = $tag->name;
 			}
 		}
 
@@ -117,76 +110,139 @@ class ConvertKit_PMP_API {
 	 * @param string $user_name
 	 * @param int $tag_id
 	 */
-	public function add_tag_to_user( $user_email, $user_name, $tag_id ){
+	public function add_tag_to_user( $user_email, $user_name, $tag_id ) {
 
+		// Get the API key.
+		$api_key = $this->api_key;
+		if ( '' == $api_key ) {
+			return;
+		}
+
+		// Add args for this API endpoint.
 		$args = array(
-			'name' => $user_name,
+			'first_name' => $user_name,
 			'email' => $user_email,
 		);
-		$response = $this->do_api_call( 'tags/' . $tag_id . '/subscribe', $args, 'POST' );
+
+		// Build the request URL.
+		$query_args = array();
+		$request_url = $this->api_url . '/' . $this->api_version . '/tags/' . $tag_id . '/subscribe';
+		$query_args['api_key'] = $api_key;
+		$request_url = add_query_arg( $query_args, $request_url );
+
+		// Send the data to ConvertKit.
+		$request = wp_remote_post(
+			$request_url,
+			array(
+				'body'    => json_encode( $args ),
+				'timeout' => 30,
+				'headers' => array(
+					'Content-Type' => 'application/json'
+				)
+			)
+		);
+
+		if ( defined( 'CK_DEBUG') ) {
+			$this->log( "Request url: " . $request_url );
+			$this->log( "Request args: " . print_r( $args, true ) );
+		}
+	}
+
+	/**
+	 *
+	 * @param string $user_email
+	 * @param string $api_secret_key
+	 * @param int $tag_id
+	 */
+	public function remove_tag_from_user( $user_email, $api_secret_key, $tag_id ) {
+
+		// Add args for this API endpoint.
+		$args = array(
+			'email' => $user_email,
+			'api_secret' => $api_secret_key,
+		);
+
+		// Build the request URL.
+		$query_args = array();
+		$request_url = $this->api_url . '/' . $this->api_version . '/tags/' . $tag_id . '/unsubscribe';
+
+		// Send the data to ConvertKit.
+		$request = wp_remote_post(
+			$request_url,
+			array(
+				'body'    => json_encode( $args ),
+				'timeout' => 30,
+				'headers' => array(
+					'Content-Type' => 'application/json'
+				)
+			)
+		);
+
+		if ( defined( 'CK_DEBUG') ) {
+			$this->log( "Request url: " . $request_url );
+			$this->log( "Request args: " . print_r( $args, true ) );
+		}
 
 	}
 
 
 	/**
-	 * Make a remote call to ConvertKit's API.
 	 *
-	 * @param $path
-	 * @param array $query_args
-	 * @param string $method
-	 * @param null $body
-	 * @param array $request_args
-	 *
-	 * @return array|mixed|object|WP_Error
+	 * @param string $user_email
+	 * @param string $api_secret_key
+	 * @param int $tag_id
 	 */
-	public function do_api_call( $path, $query_args = array(), $method = 'GET', $body = null, $request_args = array() ) {
+	public function create_purchase( $user_email, $api_secret_key, $order ) {
+		global $pmpro_currency;
 
-		$api_key = $this->api_key;
+		$args = array(
+			'api_secret' => $api_secret_key,
+			'integration_key' => 'slxewn3xiWdPSTkLXKo2lQ',
+			'purchase'        => array(
+				'integration'      => 'Paid Memberships Pro',
+				'transaction_id'   => $order->code,
+				'email_address'    => $user_email,
+				'currency'         => $pmpro_currency,
+				'transaction_time' => date( "Y-m-d H:i:s", $order->timestamp ),
+				'subtotal'         => $order->subtotal,
+				'total'            => $order->total,
+				'status'           => 'paid',
+				'products'         => array(
+					array(
+						'pid'        => 'pmpro-' . $order->membership_level->membership_id,
+						'lid'        => 1,
+						'name'       => $order->membership_level->name,
+						'unit_price' => pmpro_round_price( $order->membership_level->initial_payment ),
+						'quantity'   => 1
+					)
+				)
+			)
+		);
 
-		if ( '' == $api_key ){
-			return array();
+		// Build the request URL.
+		$request_url = $this->api_url . '/' . $this->api_version . '/purchases';
+
+		// Send the data to ConvertKit.
+		$request = wp_remote_post(
+			$request_url,
+			array(
+				'body'    => json_encode( $args ),
+				'timeout' => 30,
+				'headers' => array(
+					'Content-Type' => 'application/json'
+				)
+			)
+		);
+
+		if ( ! is_wp_error( $request ) && function_exists( 'add_pmpro_membership_order_meta' ) ) {
+			$purchase = json_decode( $request['body'] );
+			add_pmpro_membership_order_meta( $order->id, 'convertkit_pmp_purchase_id', $purchase->id );
 		}
 
-		// Setup the URL endpoint
-		$request_url = $this->api_url . '/' . $this->api_version . '/' . $path;
-		$query_args['api_key'] = $api_key;
-		$request_url = add_query_arg( $query_args, $request_url );
-
-		// Setup the request args
-		$request_args = array_merge( array(
-			'body' => $body,
-			'headers' => array(
-				'Accept' => 'application/json',
-			),
-			'method'  => $method,
-			'timeout' => 30,
-
-		), $request_args );
-
-		$this->log( "Request url: " . $request_url );
-		$this->log( "Request args: " . print_r( $request_args, true ) );
-
-		// Do the request
-		$response = wp_remote_request( $request_url, $request_args );
-
-		// Handle the response
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		} else {
-			$response_body = wp_remote_retrieve_body( $response );
-			$response_data = json_decode( $response_body, true );
-
-			if( is_null( $response_data ) ) {
-				$this->log( "Response data not null. " . print_r( $response,true));
-				return new WP_Error( 'parse_failed', __('Could not parse response from ConvertKit', 'convertkit-pmp' ) );
-			} else if( isset( $response_data['error']) && isset($response_data['message'] ) ) {
-				return new WP_Error( $response_data['error'], $response_data['message'] );
-			} else {
-				return $response_data;
-			}
-
+		if ( defined( 'CK_DEBUG') ) {
+			$this->log( "Request url: " . $request_url );
+			$this->log( "Request args: " . print_r( $args, true ) );
 		}
-
 	}
 
 
@@ -198,14 +254,10 @@ class ConvertKit_PMP_API {
 	 */
 	public function log( $message ) {
 
-		if ( defined( 'CK_DEBUG') ) {
-
-			$log     = fopen( plugin_dir_path( __FILE__ ) . '/log.txt', 'a+' );
-			$message = '[' . date( 'd-m-Y H:i:s' ) . '] ' . $message . PHP_EOL;
-			fwrite( $log, $message );
-			fclose( $log );
-
-		}
+		$log     = fopen( plugin_dir_path( __FILE__ ) . '/log.txt', 'a+' );
+		$message = '[' . date( 'd-m-Y H:i:s' ) . '] ' . $message . PHP_EOL;
+		fwrite( $log, $message );
+		fclose( $log );
 
 	}
 
