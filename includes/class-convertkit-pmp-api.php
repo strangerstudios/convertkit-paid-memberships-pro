@@ -108,10 +108,10 @@ class ConvertKit_PMP_API {
 	 *
 	 * @param string $user_email
 	 * @param string $user_name
-	 * @param int $tag_id
+	 * @param array $subscribe_tags
+	 * @param array $subscribe_fields
 	 */
-	public function add_tag_to_user( $user_email, $user_name, $tag_id ) {
-
+	public function add_tag_to_user( $user_email, $user_name, $subscribe_tags, $subscribe_fields ) {
 		// Get the API key.
 		$api_key = $this->api_key;
 		if ( '' == $api_key ) {
@@ -124,9 +124,23 @@ class ConvertKit_PMP_API {
 			'email' => $user_email,
 		);
 
+		// If there are custom fields, add them to the body of the API request.
+		if ( ! empty( $subscribe_fields ) ) {
+			$args['fields'] = $subscribe_fields;
+		}
+
+		// If there is more than one tag, add the rest as additional tags in the body of the API request.
+		if ( count( $subscribe_tags ) > 1 ) {
+			$primary_tag_id = array_shift( $subscribe_tags );
+			$args['tags'] = $subscribe_tags;
+		} else {
+			// Set the primary tag ID for the API request to the only item in the array of $subscribe_tags.
+			$primary_tag_id = array_values( $subscribe_tags )[0];
+		}
+
 		// Build the request URL.
 		$query_args = array();
-		$request_url = $this->api_url . '/' . $this->api_version . '/tags/' . $tag_id . '/subscribe';
+		$request_url = $this->api_url . '/' . $this->api_version . '/tags/' . $primary_tag_id . '/subscribe';
 		$query_args['api_key'] = $api_key;
 		$request_url = add_query_arg( $query_args, $request_url );
 
