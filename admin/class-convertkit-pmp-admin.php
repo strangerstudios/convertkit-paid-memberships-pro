@@ -512,6 +512,8 @@ class ConvertKit_PMP_Admin {
 				/**
 				 * Allow custom code to filter the unsubscribe tags for the user by email.
 				 *
+				 * @since TBD
+				 *
 				 * @param array $unsubscribe_tags The array of tag IDs to unubscribe this email address from.
 				 * @param string $user_email The user's email address to unsubscribe tags for.
 				 * @param array $new_levels The new level objects for this user.
