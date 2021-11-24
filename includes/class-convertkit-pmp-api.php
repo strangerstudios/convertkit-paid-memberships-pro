@@ -140,7 +140,7 @@ class ConvertKit_PMP_API {
 
 		// Build the request URL.
 		$query_args = array();
-		$request_url = $this->api_url . '/' . $this->api_version . '/tags/' . $primary_tag_id . '/subscribe';
+		$request_url = $this->api_url . '/' . $this->api_version . '/tags/' . intval( $primary_tag_id ) . '/subscribe';
 		$query_args['api_key'] = $api_key;
 		$request_url = add_query_arg( $query_args, $request_url );
 
