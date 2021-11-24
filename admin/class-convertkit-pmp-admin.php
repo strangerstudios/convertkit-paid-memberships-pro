@@ -490,8 +490,6 @@ class ConvertKit_PMP_Admin {
 			 *
 			 * @param array $subscribe_fields The array of fields to add for the subscriber.
 			 * @param string $user_email The user's email address to subscribe tags for.
-			 *
-			 * @return array The array of fields to add for the subscriber.
 			 */
 			$subscribe_fields = apply_filters( 'pmpro_convertkit_subscribe_fields', array(), $user_email );
 
