@@ -135,7 +135,7 @@ class ConvertKit_PMP_API {
 			$args['tags'] = $subscribe_tags;
 		} else {
 			// Set the primary tag ID for the API request to the only item in the array of $subscribe_tags.
-			$primary_tag_id = array_values( $subscribe_tags )[0];
+			$primary_tag_id = reset( $subscribe_tags );
 		}
 
 		// Build the request URL.
