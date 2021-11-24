@@ -474,6 +474,8 @@ class ConvertKit_PMP_Admin {
 			/**
 			 * Allow custom code to filter the subscribe tags for the user by email.
 			 *
+			 * @since TBD
+			 *
 			 * @param array $subscribe_tags The array of tag IDs to subscribe this email address to.
 			 * @param string $user_email The user's email address to subscribe tags for.
 			 * @param array $new_levels The new level objects for this user.
