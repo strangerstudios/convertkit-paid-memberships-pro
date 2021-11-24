@@ -525,7 +525,7 @@ class ConvertKit_PMP_Admin {
 				// Run the API call to remove tags from this subscriber.
 				if ( ! empty ( $unsubscribe_tags ) && ! empty ( $api_secret_key ) ) {
 					foreach ( $unsubscribe_tags as $unsubscribe_tag ) {
-						$this->api->remove_tag_from_user( $user_email, $api_secret_key, $unsubscribe_tags );
+						$this->api->remove_tag_from_user( $user_email, $api_secret_key, $unsubscribe_tag );
 					}
 				}
 			}
