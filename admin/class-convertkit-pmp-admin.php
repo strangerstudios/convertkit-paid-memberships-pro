@@ -517,7 +517,7 @@ class ConvertKit_PMP_Admin {
 				 * @param array $new_levels The new level objects for this user.
 				 * @param array $old_levels The old level objects for this user.
 				 */
-				$unsubscribe_tags = apply_filters( 'pmpro_convertkit_subscribe_tags', $unsubscribe_tags, $user_email, $new_levels, $old_levels );
+				$unsubscribe_tags = apply_filters( 'pmpro_convertkit_unsubscribe_tags', $unsubscribe_tags, $user_email, $new_levels, $old_levels );
 
 				// Get the secret API key.
 				$api_secret_key = $this->get_option( 'api-secret-key' );
