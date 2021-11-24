@@ -480,8 +480,6 @@ class ConvertKit_PMP_Admin {
 			 * @param string $user_email The user's email address to subscribe tags for.
 			 * @param array $new_levels The new level objects for this user.
 			 * @param array $old_levels The old level objects for this user.
-			 *
-			 * @return array The array of tag IDs to subscribe this email address to.
 			 */
 			$subscribe_tags = apply_filters( 'pmpro_convertkit_subscribe_tags', $subscribe_tags, $user_email, $new_levels, $old_levels );
 
