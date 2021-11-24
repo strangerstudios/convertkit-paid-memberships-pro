@@ -486,6 +486,8 @@ class ConvertKit_PMP_Admin {
 			/**
 			 * Allow custom code to add additional fields for the subscriber.
 			 *
+			 * @since TBD
+			 *
 			 * @param array $subscribe_fields The array of fields to add for the subscriber.
 			 * @param string $user_email The user's email address to subscribe tags for.
 			 *
