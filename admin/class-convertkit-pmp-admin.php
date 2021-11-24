@@ -465,16 +465,36 @@ class ConvertKit_PMP_Admin {
 			// Build a unique array of tags to subscribe to contact and remove from contact.
 			$subscribe_tags = array_diff( $new_tags, $old_tags );
 			$unsubscribe_tags = array_diff( $old_tags, $new_tags );
-		
+
 			// Get the subscriber information.
 			$user = get_userdata( $user_id );
 			$user_email = $user->user_email;
 			$user_name = $user->first_name . ' ' . $user->last_name;
 
+			/**
+			 * Allow custom code to filter the subscribe tags for the user by email.
+			 *
+			 * @since TBD
+			 *
+			 * @param array $subscribe_tags The array of tag IDs to subscribe this email address to.
+			 * @param string $user_email The user's email address to subscribe tags for.
+			 * @param array $new_levels The new level objects for this user.
+			 * @param array $old_levels The old level objects for this user.
+			 */
+			$subscribe_tags = apply_filters( 'pmpro_convertkit_subscribe_tags', $subscribe_tags, $user_email, $new_levels, $old_levels );
+
+			/**
+			 * Allow custom code to add additional fields for the subscriber.
+			 *
+			 * @since TBD
+			 *
+			 * @param array $subscribe_fields The array of fields to add for the subscriber.
+			 * @param string $user_email The user's email address to subscribe tags for.
+			 */
+			$subscribe_fields = apply_filters( 'pmpro_convertkit_subscribe_fields', array(), $user_email );
+
 			// Run the API call to add tag to this subscriber.
-			foreach ( $subscribe_tags as $subscribe_tag ) {
-				$this->api->add_tag_to_user( $user_email, $user_name, $subscribe_tag );
-			}
+			$this->api->add_tag_to_user( $user_email, $user_name, $subscribe_tags, $subscribe_fields );
 
 			/**
 			 * Option to remove other tags for other levels on level change.
@@ -487,13 +507,25 @@ class ConvertKit_PMP_Admin {
 			$remove_tags = apply_filters( 'pmpro_convertkit_after_all_membership_level_changes_remove_tags', false, $unsubscribe_tags );
 			
 			if ( ! empty( $remove_tags ) ) {
+				/**
+				 * Allow custom code to filter the unsubscribe tags for the user by email.
+				 *
+				 * @since TBD
+				 *
+				 * @param array $unsubscribe_tags The array of tag IDs to unubscribe this email address from.
+				 * @param string $user_email The user's email address to unsubscribe tags for.
+				 * @param array $new_levels The new level objects for this user.
+				 * @param array $old_levels The old level objects for this user.
+				 */
+				$unsubscribe_tags = apply_filters( 'pmpro_convertkit_subscribe_tags', $unsubscribe_tags, $user_email, $new_levels, $old_levels );
+
 				// Get the secret API key.
 				$api_secret_key = $this->get_option( 'api-secret-key' );
 
 				// Run the API call to remove tags from this subscriber.
 				if ( ! empty ( $unsubscribe_tags ) && ! empty ( $api_secret_key ) ) {
 					foreach ( $unsubscribe_tags as $unsubscribe_tag ) {
-						$this->api->remove_tag_from_user( $user_email, $api_secret_key, $unsubscribe_tag );
+						$this->api->remove_tag_from_user( $user_email, $api_secret_key, $unsubscribe_tags );
 					}
 				}
 			}
