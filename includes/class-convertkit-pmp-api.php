@@ -247,7 +247,7 @@ class ConvertKit_PMP_API {
 				)
 			)
 		);
-		// error_log( print_r( $request, true ) );
+		
 		if ( ! is_wp_error( $request ) && function_exists( 'add_pmpro_membership_order_meta' ) ) {
 			$purchase = json_decode( $request['body'] );
 			add_pmpro_membership_order_meta( $order->id, 'convertkit_pmp_purchase_id', $purchase->id );			
@@ -266,6 +266,16 @@ class ConvertKit_PMP_API {
 		}
 	}
 
+	/**
+	 * Search for a subscriber by email address
+	 * 
+	 * @param string $user_email
+	 * @param string $api_secret_key	 
+	 *
+	 * @since TBD
+	 *
+	 * @return bool|void
+	 */
 	public function get_subscriber( $user_email, $api_secret_key ) {
 
 		/**
