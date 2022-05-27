@@ -252,12 +252,7 @@ class ConvertKit_PMP_API {
 			$purchase = json_decode( $request['body'] );
 			add_pmpro_membership_order_meta( $order->id, 'convertkit_pmp_purchase_id', $purchase->id );			
 
-			//Get the subscriber
-			$subscriber = $this->get_subscriber( $user_email, $api_secret_key );
-			//Use the subscriber ID and add to user meta
-			if( !empty( $subscriber->id ) ) {
-				update_user_meta( $order->user_id, 'pmprock_subscriber_id', $subscriber->id );
-			}
+			$this->get_subscriber_id( $user_email, $api_secret_key, $order->user_id );
 		}
 
 		if ( defined( 'CK_DEBUG') ) {
@@ -313,6 +308,37 @@ class ConvertKit_PMP_API {
 			$this->log( "Request url: " . $request_url );
 			$this->log( "Request args: " . print_r( $args, true ) );
 		}
+
+	}
+
+	/**
+	 * Gets the subscriber ID and updates it in user meta if necessary
+	 * 
+	 * @param string $user_email
+	 * @param string $api_secret_key	 
+	 *
+	 * @since TBD
+	 *
+	 * @return string|void
+	 */
+	public function get_subscriber_id( $user_email, $api_secret_key, $user_id ) {
+
+		//Check if we have a subscriber ID in user meta first
+		$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', $subscriber->id );
+
+		if( empty( $subscriber_id ) ) {
+
+			//Get the subscriber
+			$subscriber = $this->get_subscriber( $user_email, $api_secret_key );
+			//Use the subscriber ID and add to user meta
+			if( !empty( $subscriber->id ) ) {
+				update_user_meta( $order->user_id, 'pmprock_subscriber_id', $subscriber->id );
+				return $subscriber->id;
+			}
+
+		}
+
+		return $subscriber_id;
 
 	}
 
