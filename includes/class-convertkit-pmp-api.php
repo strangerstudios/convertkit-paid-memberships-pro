@@ -362,7 +362,7 @@ class ConvertKit_PMP_API {
 			'email_address' => $subscriber_info['email_address']
 		);
 
-		if( ! empty( $subscriber_info['fields'] ) ) {
+		if ( ! empty( $subscriber_info['fields'] ) ) {
 			$args['fields'] = $subscriber_info['fields'];
 		}
 
