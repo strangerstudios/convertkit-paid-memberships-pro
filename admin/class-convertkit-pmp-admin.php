@@ -660,12 +660,17 @@ class ConvertKit_PMP_Admin {
 					'user_id' 			=> $user_id
 				);
 
-				$subscriber_info = apply_filters( 'pmprock_subscriber_update_data', $subscriber );
+				/**
+				 * Filter the subscriber data to add custom fields 
+				 * 
+				 * @param array $subscriber_info The array containing the subscriber data
+				 */
+				$subscriber_data = apply_filters( 'pmprock_subscriber_update_data', $subscriber_data );
 
 				// Get the secret API key.
 				$api_secret_key = $this->get_option( 'api-secret-key' );
 
-				$this->api->update_subscriber( $subscriber_id, $api_secret_key, $subscriber_info );
+				$this->api->update_subscriber( $subscriber_id, $api_secret_key, $subscriber_data );
 			}
 
 	 	}
