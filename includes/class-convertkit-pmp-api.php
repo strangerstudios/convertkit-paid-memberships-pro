@@ -358,7 +358,7 @@ class ConvertKit_PMP_API {
 
 		$args = array(
 			'api_secret' => $api_secret_key,
-			'first_name' => $subscriber_info['first_name'].'sss',
+			'first_name' => $subscriber_info['first_name'],
 			'email_address' => $subscriber_info['email_address']
 		);
 
