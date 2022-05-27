@@ -252,7 +252,9 @@ class ConvertKit_PMP_API {
 			$purchase = json_decode( $request['body'] );
 			add_pmpro_membership_order_meta( $order->id, 'convertkit_pmp_purchase_id', $purchase->id );			
 
-			$this->get_subscriber_id( $user_email, $api_secret_key, $order->user_id );
+			$subscriber_id = $this->get_subscriber_id( $user_email, $api_secret_key, $order->user_id );
+
+			update_user_meta( $order->user_id, 'pmprock_subscriber_id', $subscriber_id );
 		}
 
 		if ( defined( 'CK_DEBUG') ) {
@@ -319,7 +321,7 @@ class ConvertKit_PMP_API {
 	 *
 	 * @since TBD
 	 *
-	 * @return string|void
+	 * @return string
 	 */
 	public function get_subscriber_id( $user_email, $api_secret_key, $user_id ) {
 
@@ -331,8 +333,7 @@ class ConvertKit_PMP_API {
 			//Get the subscriber
 			$subscriber = $this->get_subscriber( $user_email, $api_secret_key );
 			//Use the subscriber ID and add to user meta
-			if( !empty( $subscriber->id ) ) {
-				update_user_meta( $order->user_id, 'pmprock_subscriber_id', $subscriber->id );
+			if( !empty( $subscriber->id ) ) {				
 				return $subscriber->id;
 			}
 
