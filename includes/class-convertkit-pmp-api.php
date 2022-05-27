@@ -299,7 +299,7 @@ class ConvertKit_PMP_API {
 			
 			$results = json_decode( $request['body'] );
 			
-			if( !empty( $results->subscribers ) ) {
+			if ( ! empty( $results->subscribers ) ) {
 				//Return the first subscriber only
 				return reset( $results->subscribers );
 			}
@@ -328,12 +328,12 @@ class ConvertKit_PMP_API {
 		//Check if we have a subscriber ID in user meta first
 		$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', $subscriber->id );
 
-		if( empty( $subscriber_id ) ) {
+		if ( empty( $subscriber_id ) ) {
 
 			//Get the subscriber
 			$subscriber = $this->get_subscriber( $user_email, $api_secret_key );
 			//Use the subscriber ID and add to user meta
-			if( !empty( $subscriber->id ) ) {				
+			if ( ! empty( $subscriber->id ) ) {				
 				return $subscriber->id;
 			}
 
