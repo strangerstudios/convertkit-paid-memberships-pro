@@ -647,7 +647,7 @@ class ConvertKit_PMP_Admin {
 
 			$user_id = isset( $_REQUEST['user_id'] ) ? intval( $_REQUEST['user_id'] ) : 0;
 
-			if( !empty( $user_id ) ) {
+			if ( ! empty( $user_id ) ) {
 
 				$user_email = isset( $_REQUEST['email'] ) ? sanitize_email( $_REQUEST['email'] ) : '';
 				$first_name = isset( $_REQUEST['first_name'] ) ? sanitize_text_field( $_REQUEST['first_name'] ) : '';
@@ -657,7 +657,7 @@ class ConvertKit_PMP_Admin {
 				$subscriber_info = array(
 					'email_address' 	=> $user_email,
 					'first_name' 		=> $first_name,
-					'user_id' 			=> $user_id
+					'user_id'			=> $user_id
 				);
 
 				/**

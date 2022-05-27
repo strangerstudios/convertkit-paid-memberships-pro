@@ -328,12 +328,12 @@ class ConvertKit_PMP_API {
 		//Check if we have a subscriber ID in user meta first
 		$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', true );
 
-		if( empty( $subscriber_id ) ) {
+		if ( empty( $subscriber_id ) ) {
 
 			//Get the subscriber
 			$subscriber = $this->get_subscriber( $user_email, $api_secret_key );
 			//Use the subscriber ID and add to user meta
-			if( !empty( $subscriber->id ) ) {				
+			if ( ! empty( $subscriber->id ) ) {				
 				return $subscriber->id;
 			}
 
@@ -352,7 +352,7 @@ class ConvertKit_PMP_API {
 	 */
 	public function update_subscriber( $subscriber_id, $api_secret_key, $subscriber_info = array() ) {
 
-		if( empty( $subscriber_info ) ) {
+		if ( empty( $subscriber_info ) ) {
 			return;
 		}
 
@@ -367,7 +367,7 @@ class ConvertKit_PMP_API {
 		}
 
 		// Build the request URL.
-		$request_url = $this->api_url . '/' . $this->api_version . '/subscribers/'.$subscriber_id;
+		$request_url = $this->api_url . '/' . $this->api_version . '/subscribers/' . $subscriber_id;
 
 		// Send the data to ConvertKit.
 		$request = wp_remote_request(
