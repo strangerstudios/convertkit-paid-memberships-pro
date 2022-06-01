@@ -83,8 +83,11 @@ class ConvertKit_PMP_API {
 
 			if ( ! is_wp_error( $data ) ) {
 				$tags = json_decode( $data['body'] );
-				$tags = $tags->tags;
-				set_transient( 'convertkit_pmp_tag_data', $tags, 24*24 );
+				
+				if( ! empty( $tags->tags ) ) {
+					$tags = $tags->tags;					
+					set_transient( 'convertkit_pmp_tag_data', $tags, 24*24 );
+				}
 			}
 
 			if ( defined( 'CK_DEBUG') ) {
@@ -93,7 +96,7 @@ class ConvertKit_PMP_API {
 
 		}
 
-		if ( ! empty( $tags ) ) {
+		if ( ! empty( $tags ) && empty( $tags->error ) ) {
 			foreach( $tags as $key => $tag ) {
 				$this->tags[ $tag->id ] = $tag->name;
 			}

@@ -174,6 +174,27 @@ class ConvertKit_PMP_Admin {
 
 	}
 
+	/**
+	 * Detect if the API key has changed and clear transient data if needed
+	 *
+	 * @since       TBD
+	 * @return      void
+	 */
+	public function updated_options( $option, $old_value, $new_value ) {
+
+		if( $option == 'convertkit-pmp-options' ) {
+			
+			$old_api_key = ! empty( $old_value['api-key'] ) ? $old_value['api-key'] : '';
+			$new_api_key = ! empty( $new_value['api-key'] ) ? $new_value['api-key'] : '';
+
+			if( $new_api_key != $old_api_key ) {
+				//The API Key has changed. Clear transients to use the new API key
+				delete_transient( 'convertkit_pmp_tag_data' );
+			}
+		}
+
+	}
+
 
 	/**
 	 * Adds a settings page link to a menu

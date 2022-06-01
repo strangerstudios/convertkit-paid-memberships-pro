@@ -148,6 +148,7 @@ class ConvertKit_PMP {
 		$this->loader->add_filter( 'plugin_action_links_convertkit-paid-memberships-pro/convertkit-pmp.php' , $plugin_admin, 'settings_link' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_menu' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
+		$this->loader->add_action( 'updated_option', $plugin_admin, 'updated_options', 10, 3 );
 		$this->loader->add_action( 'pmpro_after_all_membership_level_changes', $plugin_admin, 'after_all_membership_level_changes', 10, 3 );
 		$this->loader->add_action( 'pmpro_checkout_after_tos_fields', $plugin_admin, 'after_tos_fields', 10, 1 );
 		$this->loader->add_action( 'pmpro_paypalexpress_session_vars', $plugin_admin, 'paypalexpress_session_vars', 10, 1 );
