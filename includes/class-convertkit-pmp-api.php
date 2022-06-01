@@ -326,7 +326,7 @@ class ConvertKit_PMP_API {
 	public function get_subscriber_id( $user_email, $api_secret_key, $user_id ) {
 
 		//Check if we have a subscriber ID in user meta first
-		$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', $subscriber->id );
+		$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', true );
 
 		if ( empty( $subscriber_id ) ) {
 
@@ -352,7 +352,10 @@ class ConvertKit_PMP_API {
 	 */
 	public function log( $message ) {
 
-		$log     = fopen( plugin_dir_path( __FILE__ ) . '/log.txt', 'a+' );
+		//By default this points to \plugins\convertkit-paid-memberhips-pro\includes/log.txt
+		$pmprock_log_file = apply_filters( 'pmprock_logfile', plugin_dir_path( __FILE__ ) . 'log.txt' );
+
+		$log     = fopen( $pmprock_log_file, 'a+' );
 		$message = '[' . date( 'd-m-Y H:i:s' ) . '] ' . $message . PHP_EOL;
 		fwrite( $log, $message );
 		fclose( $log );
