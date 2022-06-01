@@ -354,8 +354,8 @@ class ConvertKit_PMP_Admin {
 		$require_opt_in = $this->get_option( 'opt-in-non-members' );
 
 		?><input type="checkbox" id="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]" name="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]" <?php checked( $require_opt_in, 'yes' ); ?> value="yes" />
-		<label for="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]"><?php esc_html_e( 'Display an opt-in checkbox on Membership Checkout' ); ?></label>
-		<p class="description"><?php esc_html_e( 'If enabled, members will only be subscribed and tagged in ConvertKit if the "opt-in" checkbox presented on checkout is checked.', 'convertkit-pmp' ); ?></p><?php
+		<label for="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]"><?php esc_html_e( 'Automatically add a tag to non-members upon cancelling their membership' ); ?></label>
+		<p class="description"><?php esc_html_e( 'Select the tag you would like added to non-members under the "Assign Tags" section below.', 'convertkit-pmp' ); ?></p><?php
 	}	
 
 	/**
@@ -511,11 +511,18 @@ class ConvertKit_PMP_Admin {
 			 * If opt-in for non-members is enabled, we'll add a 'Non-member' tag
 			 * to the subscriber.
 			 */
-			if( empty( $new_levels ) ) {				
+			if( empty( $new_levels ) ) {
+
 				$opt_in_non_members = $this->get_option( 'opt-in-non-members' );
 
 				if( !empty( $opt_in_non_members ) ) {
-					$subscribe_tags[] = $this->get_option( 'convertkit-mapping-0' );
+
+					$non_members_tag = $this->get_option( 'convertkit-mapping-0' );
+
+					if( !empty( $non_members_tag ) ) {
+						$subscribe_tags[] = $this->get_option( 'convertkit-mapping-0' );
+					}
+
 				}
 			}
 
