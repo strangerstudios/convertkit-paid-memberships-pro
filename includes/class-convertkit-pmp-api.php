@@ -352,7 +352,15 @@ class ConvertKit_PMP_API {
 	 */
 	public function log( $message ) {
 
-		//By default this points to \plugins\convertkit-paid-memberhips-pro\includes/log.txt
+		/**
+		 * Filter the debug log file. 
+		 * By default this points to \plugins\convertkit-paid-memberhips-pro\includes/log.txt
+		 * 
+		 * @param string $path
+		 *
+		 * @since TBD
+		 *		 
+		 */
 		$pmprock_log_file = apply_filters( 'pmprock_logfile', plugin_dir_path( __FILE__ ) . 'log.txt' );
 
 		$log     = fopen( $pmprock_log_file, 'a+' );
