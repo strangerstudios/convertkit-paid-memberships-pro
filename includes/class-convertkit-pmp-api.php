@@ -326,7 +326,7 @@ class ConvertKit_PMP_API {
 	public function get_subscriber_id( $user_email, $api_secret_key, $user_id ) {
 
 		//Check if we have a subscriber ID in user meta first
-		$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', $subscriber->id );
+		$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', true );
 
 		if ( empty( $subscriber_id ) ) {
 

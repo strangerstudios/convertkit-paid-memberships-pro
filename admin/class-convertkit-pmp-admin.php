@@ -129,6 +129,15 @@ class ConvertKit_PMP_Admin {
 			$this->plugin_name . '-display-options'
 		);
 
+		// Subscribe non-members?
+		add_settings_field(
+			'opt-in-non-members',
+			apply_filters( $this->plugin_name . '-opt-in-non-members', __( 'Opt-In Non-members', 'convertkit-pmp' ) ),
+			array( $this, 'opt_in_non_members' ),
+			$this->plugin_name,
+			$this->plugin_name . '-display-options'
+		);
+
 		// add_settings_section( $id, $title, $callback, $menu_slug );
 		add_settings_section(
 			$this->plugin_name . '-ck-mapping',
@@ -141,7 +150,20 @@ class ConvertKit_PMP_Admin {
 		$levels = $this->get_pmp_membership_levels();
 
 		// Get all tags from ConvertKit
-		$tags = $this->api->get_tags();
+		$tags = $this->api->get_tags();		
+
+		//Choose which tag should be used for non-members
+		add_settings_field(
+			'convertkit-mapping-0',
+			apply_filters( $this->plugin_name . '-display-convertkit-mapping-0' , __('Non-members', 'convertkit-pmp' ) ),
+			array( $this, 'display_options_convertkit_mapping' ),
+			$this->plugin_name,
+			$this->plugin_name . '-ck-mapping',
+			array( 'key' => 0,
+			       'name' => __('Non-members','convertkit-pmp'),
+			       'tags' => $tags,
+			)
+		);
 
 		// No PMP mappings created yet
 		if ( empty ( $levels ) ){
@@ -322,6 +344,19 @@ class ConvertKit_PMP_Admin {
 		<p class="description"><?php echo __( 'Optional (only used if the above field is checked). Customize the required opt-in label shown on Membership Checkout.', 'convertkit-pmp' ); ?></p><?php
 	}
 
+	/**
+	 * Creates a settings input to assign a tag for non-members
+	 *
+	 * @since 		TBD
+	 * @return 		mixed 			The settings field
+	 */
+	public function opt_in_non_members() {
+		$require_opt_in = $this->get_option( 'opt-in-non-members' );
+
+		?><input type="checkbox" id="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]" name="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]" <?php checked( $require_opt_in, 'yes' ); ?> value="yes" />
+		<label for="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]"><?php esc_html_e( 'Display an opt-in checkbox on Membership Checkout' ); ?></label>
+		<p class="description"><?php esc_html_e( 'If enabled, members will only be subscribed and tagged in ConvertKit if the "opt-in" checkbox presented on checkout is checked.', 'convertkit-pmp' ); ?></p><?php
+	}	
 
 	/**
 	 * Empty mapping callback
@@ -456,7 +491,7 @@ class ConvertKit_PMP_Admin {
 				if ( ! empty( $tag_id_to_add ) ) {
 					$new_tags[] = $tag_id_to_add;
 				}
-			}
+			}			
 
 			// Remove duplicates in the array of new and old tags.
 			$new_tags = array_unique( $new_tags );		
@@ -470,6 +505,19 @@ class ConvertKit_PMP_Admin {
 			$user = get_userdata( $user_id );
 			$user_email = $user->user_email;
 			$user_name = $user->first_name . ' ' . $user->last_name;
+
+			/**
+			 * No new roles so we're assuming they're cancelling. 
+			 * If opt-in for non-members is enabled, we'll add a 'Non-member' tag
+			 * to the subscriber.
+			 */
+			if( empty( $new_levels ) ) {				
+				$opt_in_non_members = $this->get_option( 'opt-in-non-members' );
+
+				if( !empty( $opt_in_non_members ) ) {
+					$subscribe_tags[] = $this->get_option( 'convertkit-mapping-0' );
+				}
+			}
 
 			/**
 			 * Allow custom code to filter the subscribe tags for the user by email.
