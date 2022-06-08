@@ -129,15 +129,6 @@ class ConvertKit_PMP_Admin {
 			$this->plugin_name . '-display-options'
 		);
 
-		// Subscribe non-members?
-		add_settings_field(
-			'opt-in-non-members',
-			apply_filters( $this->plugin_name . '-opt-in-non-members', __( 'Opt-In Non-members', 'convertkit-pmp' ) ),
-			array( $this, 'opt_in_non_members' ),
-			$this->plugin_name,
-			$this->plugin_name . '-display-options'
-		);
-
 		// add_settings_section( $id, $title, $callback, $menu_slug );
 		add_settings_section(
 			$this->plugin_name . '-ck-mapping',
@@ -345,20 +336,6 @@ class ConvertKit_PMP_Admin {
 	}
 
 	/**
-	 * Creates a settings input to assign a tag for non-members
-	 *
-	 * @since 		TBD
-	 * @return 		mixed 			The settings field
-	 */
-	public function opt_in_non_members() {
-		$require_opt_in = $this->get_option( 'opt-in-non-members' );
-
-		?><input type="checkbox" id="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]" name="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]" <?php checked( $require_opt_in, 'yes' ); ?> value="yes" />
-		<label for="<?php echo $this->plugin_name; ?>-options[opt-in-non-members]"><?php esc_html_e( 'Automatically add a tag to non-members upon cancelling their membership' ); ?></label>
-		<p class="description"><?php esc_html_e( 'Select the tag you would like added to non-members under the "Assign Tags" section below.', 'convertkit-pmp' ); ?></p><?php
-	}	
-
-	/**
 	 * Empty mapping callback
 	 *
 	 * No PMP Membership Levels have been added yet.
@@ -507,23 +484,27 @@ class ConvertKit_PMP_Admin {
 			$user_name = $user->first_name . ' ' . $user->last_name;
 
 			/**
-			 * No new roles so we're assuming they're cancelling. 
-			 * If opt-in for non-members is enabled, we'll add a 'Non-member' tag
-			 * to the subscriber.
+			 * No new levels so we're assuming they're cancelling. 
+			 * We'll add a 'Non-member' tag to the subscriber and remove it if they become a member again
 			 */
-			if( empty( $new_levels ) ) {
 
-				$opt_in_non_members = $this->get_option( 'opt-in-non-members' );
+			if( empty( $new_tags ) ) {
 
-				if( !empty( $opt_in_non_members ) ) {
+				$non_members_tag = $this->get_option( 'convertkit-mapping-0' );
 
-					$non_members_tag = $this->get_option( 'convertkit-mapping-0' );
-
-					if( !empty( $non_members_tag ) ) {
-						$subscribe_tags[] = $this->get_option( 'convertkit-mapping-0' );
-					}
-
+				if( !empty( $non_members_tag ) ) {
+					$subscribe_tags[] = $non_members_tag;
 				}
+
+			} else {
+
+				//We're signing up for a new level, make sure the non-member tag is removed
+				$non_members_tag = $this->get_option( 'convertkit-mapping-0' );
+				if( !empty( $non_members_tag ) ) {
+					$api_secret_key = $this->get_option( 'api-secret-key' );
+					$this->api->remove_tag_from_user( $user_email, $api_secret_key, $non_members_tag );
+				}
+				
 			}
 
 			/**
