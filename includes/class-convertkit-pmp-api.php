@@ -326,7 +326,7 @@ class ConvertKit_PMP_API {
 	public function get_subscriber_id( $user_email, $api_secret_key, $user_id ) {
 
 		//Check if we have a subscriber ID in user meta first
-		$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', $subscriber->id );
+		$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', true );
 
 		if ( empty( $subscriber_id ) ) {
 
@@ -341,6 +341,59 @@ class ConvertKit_PMP_API {
 
 		return $subscriber_id;
 
+	}
+
+	/**
+	 * Updates a subscriber's first name and email address 
+	 * 
+	 * @param string $user_email
+	 * @param string $api_secret_key
+	 * @param int $tag_id
+	 */
+	public function update_subscriber( $subscriber_id, $api_secret_key, $subscriber_info = array() ) {
+
+		if ( empty( $subscriber_info ) ) {
+			return;
+		}
+
+		$args = array(
+			'api_secret' => $api_secret_key,
+			'first_name' => $subscriber_info['first_name'],
+			'email_address' => $subscriber_info['email_address']
+		);
+
+		if ( ! empty( $subscriber_info['fields'] ) ) {
+			$args['fields'] = $subscriber_info['fields'];
+		}
+
+		// Build the request URL.
+		$request_url = $this->api_url . '/' . $this->api_version . '/subscribers/' . $subscriber_id;
+
+		// Send the data to ConvertKit.
+		$request = wp_remote_request(
+			$request_url,
+			array(
+				'method'  => 'PUT',
+				'body'    => json_encode( $args ),
+				'timeout' => 30,
+				'headers' => array(
+					'Content-Type' => 'application/json'
+				)
+			)
+		);
+		
+		if ( ! is_wp_error( $request ) && function_exists( 'add_pmpro_membership_order_meta' ) ) {
+			$purchase = json_decode( $request['body'] );			
+
+			$subscriber_id = $this->get_subscriber_id( $subscriber_info['email_address'], $api_secret_key, $subscriber_info['user_id'] );
+
+			update_user_meta( $subscriber_info['user_id'], 'pmprock_subscriber_id', $subscriber_id );
+		}
+
+		if ( defined( 'CK_DEBUG') ) {
+			$this->log( "Request url: " . $request_url );
+			$this->log( "Request args: " . print_r( $args, true ) );
+		}
 	}
 
 

@@ -152,6 +152,8 @@ class ConvertKit_PMP {
 		$this->loader->add_action( 'pmpro_checkout_after_tos_fields', $plugin_admin, 'after_tos_fields', 10, 1 );
 		$this->loader->add_action( 'pmpro_paypalexpress_session_vars', $plugin_admin, 'paypalexpress_session_vars', 10, 1 );
 		$this->loader->add_action( 'pmpro_after_checkout', $plugin_admin, 'after_checkout', 10, 2 );
+		$this->loader->add_action( 'personal_options_update', $plugin_admin, 'update_profile', 10, 2 );
+		$this->loader->add_action( 'edit_user_profile_update', $plugin_admin, 'update_profile', 10, 2 );
 		$this->loader->add_action( 'plugin_row_meta', $plugin_admin, 'plugin_row_meta', 10, 2 );
 
 	}
