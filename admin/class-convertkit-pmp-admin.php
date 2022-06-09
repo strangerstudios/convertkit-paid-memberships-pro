@@ -317,7 +317,25 @@ class ConvertKit_PMP_Admin {
 
 		?><input type="checkbox" id="<?php echo $this->plugin_name; ?>-options[require-opt-in]" name="<?php echo $this->plugin_name; ?>-options[require-opt-in]" <?php checked( $require_opt_in, 'yes' ); ?> value="yes" />
 		<label for="<?php echo $this->plugin_name; ?>-options[require-opt-in]"><?php esc_html_e( 'Display an opt-in checkbox on Membership Checkout' ); ?></label>
-		<p class="description"><?php esc_html_e( 'If enabled, members will only be subscribed and tagged in ConvertKit if the "opt-in" checkbox presented on checkout is checked.', 'convertkit-pmp' ); ?></p><?php
+		<p class="description"><?php esc_html_e( 'If enabled, members will only be subscribed and tagged in ConvertKit if the "opt-in" checkbox presented on checkout is checked.', 'convertkit-pmp' ); ?></p>
+		<script type='text/javascript'>
+		jQuery(document).ready(function(){
+			if( jQuery( '.convertkit_pmp_require_opt_in input' ).is( ':checked' ) ) {
+				jQuery( '.convertkit_hide' ).show();
+			} else {
+				jQuery( '.convertkit_hide' ).hide();
+			}
+			jQuery('body').on('click', '.convertkit_pmp_require_opt_in input', function(){
+				if( jQuery(this).is(':checked' ) ) {
+					jQuery( '.convertkit_hide' ).show();
+				} else {
+					jQuery( '.convertkit_hide' ).hide();
+				}
+				
+		    });
+		});
+		</script>
+		<?php
 	}
 
 
@@ -732,44 +750,5 @@ class ConvertKit_PMP_Admin {
 		}
 		return $links;
 	}
-
-
-	/**
-	 * Add show and hide JS to the settings page for specific fields
-	 *
-	 * @since   TBD
-	 * @return	string - Javascript code
-	 */
-	public function admin_inline_script() {
-
-		if( !empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'convertkit-pmp' ) {
-
-			$script = "";
-
-			$script .= "<script type='text/javascript'>\n";
-			$script .= "jQuery(document).ready(function(){\n";
-			$script .= "
-			if( jQuery( '.convertkit_pmp_require_opt_in input' ).is( ':checked' ) ) {
-				jQuery( '.convertkit_hide' ).show();
-			} else {
-				jQuery( '.convertkit_hide' ).hide();
-			}
-			jQuery('body').on('click', '.convertkit_pmp_require_opt_in input', function(){
-				if( jQuery(this).is(':checked' ) ) {
-					jQuery( '.convertkit_hide' ).show();
-				} else {
-					jQuery( '.convertkit_hide' ).hide();
-				}
-				
-		    });";
-			$script .= "\n});"; 
-			$script .= "\n</script>"; 
-
-			echo $script;
-
-		}
-
-	}
-
 
 }
