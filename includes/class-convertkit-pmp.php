@@ -156,6 +156,7 @@ class ConvertKit_PMP {
 		$this->loader->add_action( 'personal_options_update', $plugin_admin, 'update_profile', 10, 2 );
 		$this->loader->add_action( 'edit_user_profile_update', $plugin_admin, 'update_profile', 10, 2 );
 		$this->loader->add_action( 'plugin_row_meta', $plugin_admin, 'plugin_row_meta', 10, 2 );
+		$this->loader->add_action( 'in_admin_footer', $plugin_admin, 'admin_inline_script', 20 );
 
 	}
 
