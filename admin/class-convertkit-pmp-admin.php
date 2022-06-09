@@ -386,8 +386,8 @@ class ConvertKit_PMP_Admin {
 				<option value="<?php echo $value; ?>" <?php selected( $tag, $value ); ?>><?php echo $text; ?></option><?php
 			}
 			?></select><?php			
-			if( $args['key'] === 0 ) {
-				printf( "<p class='description'>%s</p>", __( "This tag will be assigned when a member's level is removed", "convertkit-pmp" ) );
+			if ( $args['key'] === 0 ) {
+				printf( "<p class='description'><small>%s</small></p>", esc_html( "This tag will be assigned when a member's level is removed.", "convertkit-pmp" ) );
 			}
 		}
 
