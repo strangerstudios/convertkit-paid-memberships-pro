@@ -192,7 +192,7 @@ class ConvertKit_PMP_Admin {
 	/**
 	 * Detect if the API key has changed and clear transient data if needed
 	 *
-	 * @since       TBD
+	 * @since       1.2.0
 	 * @return      void
 	 */
 	public function updated_options( $option, $old_value, $new_value ) {
@@ -548,7 +548,7 @@ class ConvertKit_PMP_Admin {
 			/**
 			 * Allow custom code to filter the subscribe tags for the user by email.
 			 *
-			 * @since TBD
+			 * @since 1.2.0
 			 *
 			 * @param array $subscribe_tags The array of tag IDs to subscribe this email address to.
 			 * @param string $user_email The user's email address to subscribe tags for.
@@ -560,7 +560,7 @@ class ConvertKit_PMP_Admin {
 			/**
 			 * Allow custom code to add additional fields for the subscriber.
 			 *
-			 * @since TBD
+			 * @since 1.2.0
 			 *
 			 * @param array $subscribe_fields The array of fields to add for the subscriber.
 			 * @param string $user_email The user's email address to subscribe tags for.
@@ -584,7 +584,7 @@ class ConvertKit_PMP_Admin {
 				/**
 				 * Allow custom code to filter the unsubscribe tags for the user by email.
 				 *
-				 * @since TBD
+				 * @since 1.2.0
 				 *
 				 * @param array $unsubscribe_tags The array of tag IDs to unubscribe this email address from.
 				 * @param string $user_email The user's email address to unsubscribe tags for.
@@ -712,7 +712,7 @@ class ConvertKit_PMP_Admin {
  	 * Updates a subscriber's details upon updating a user profile in wp-admin		
  	 *		
  	 * @access public		
- 	 * @since TBD		
+ 	 * @since 1.2.0		
  	 * @return void		
  	 */		
  	public function update_profile( $user_id ) {	

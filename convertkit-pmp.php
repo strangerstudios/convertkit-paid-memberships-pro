@@ -15,7 +15,7 @@
  * Plugin Name:       Paid Memberships Pro - ConvertKit Integration
  * Plugin URI: 		  https://www.paidmembershipspro.com/add-ons/convertkit
  * Description: 	  Subscribe and tag your Paid Memberships Pro members in ConvertKit.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Author:            Paid Memberships Pro
  * Author URI:        https://www.paidmembershipspro.com
  * License:           GPL-2.0+

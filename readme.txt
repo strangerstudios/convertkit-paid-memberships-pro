@@ -1,9 +1,9 @@
 === Paid Memberships Pro - ConvertKit Integration ===
 Contributors: strangerstudios, kimannwall, nathanbarry, growdev
 Tags: convertkit, email, marketing, pmpro, pmp, paid memberships pro
-Requires at least: 4.0
-Tested up to: 5.9
-Stable tag: 1.1
+Requires at least: 5.0
+Tested up to: 6.0
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,14 @@ Yes, for it to work you must first have an account on ConvertKit.com
 2. Example ConvertKit Subscriber with Purchase data for their initial membership checkout order.
 
 == Changelog ==
+= 1.2 - 2022-06-09 =
+* FEATURE: Added tag settings for non-members. This will apply a tag when a member's membership level is removed - when a member signs up for a level it will remove these non-member tags in ConvertKit.
+* ENHANCEMENT: Added filter `pmpro_convertkit_subscribe_fields` to allow passing custom fields to ConvertKit when tagging a member.
+* ENHANCEMENT: Added filter `pmpro_convertkit_subscribe_tags` to allow adjusting of what tags are removed when a user is subscribed.
+* ENHANCEMENT: Added filter `pmpro_convertkit_unsubscribe_tags` to allow adjusting of what tags are removed when a user is unsubscribed.
+* ENHANCEMENT: Added a log file when 'CK_DEBUG' is defined. Filter the location where the log file is stored by using the `pmprock_logfile` filter.
+* ENHANCEMENT: Updated UI slightly to show/hide the option "Require Opt-In Label" based on the required "Require Opt-In" checkbox field.
+* REFACTOR: Refactored various methods to improve stability of storing ConvertKit meta data.
 
 = 1.1 - 2021-06-21 =
 * FEATURE: Updated opt-in settings. You can edit the label shown on the opt-in message at checkout.

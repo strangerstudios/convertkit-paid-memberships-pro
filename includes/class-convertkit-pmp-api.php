@@ -272,7 +272,7 @@ class ConvertKit_PMP_API {
 	 * @param string $user_email
 	 * @param string $api_secret_key	 
 	 *
-	 * @since TBD
+	 * @since 1.2.0
 	 *
 	 * @return bool|void
 	 */
@@ -322,7 +322,7 @@ class ConvertKit_PMP_API {
 	 * @param string $user_email
 	 * @param string $api_secret_key	 
 	 *
-	 * @since TBD
+	 * @since 1.2.0
 	 *
 	 * @return string
 	 */
@@ -414,7 +414,7 @@ class ConvertKit_PMP_API {
 		 * 
 		 * @param string $path
 		 *
-		 * @since TBD
+		 * @since 1.2.0
 		 *		 
 		 */
 		$pmprock_log_file = apply_filters( 'pmprock_logfile', plugin_dir_path( __FILE__ ) . 'log.txt' );
