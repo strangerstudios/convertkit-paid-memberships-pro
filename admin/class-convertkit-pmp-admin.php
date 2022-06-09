@@ -141,7 +141,20 @@ class ConvertKit_PMP_Admin {
 		$levels = $this->get_pmp_membership_levels();
 
 		// Get all tags from ConvertKit
-		$tags = $this->api->get_tags();
+		$tags = $this->api->get_tags();		
+
+		//Choose which tag should be used for non-members
+		add_settings_field(
+			'convertkit-mapping-0',
+			apply_filters( $this->plugin_name . '-display-convertkit-mapping-0' , __('Non-members', 'convertkit-pmp' ) ),
+			array( $this, 'display_options_convertkit_mapping' ),
+			$this->plugin_name,
+			$this->plugin_name . '-ck-mapping',
+			array( 'key' => 0,
+			       'name' => __('Non-members','convertkit-pmp'),
+			       'tags' => $tags,
+			)
+		);
 
 		// No PMP mappings created yet
 		if ( empty ( $levels ) ){
@@ -337,7 +350,6 @@ class ConvertKit_PMP_Admin {
 		<p class="description"><?php echo __( 'Optional (only used if the above field is checked). Customize the required opt-in label shown on Membership Checkout.', 'convertkit-pmp' ); ?></p><?php
 	}
 
-
 	/**
 	 * Empty mapping callback
 	 *
@@ -388,7 +400,10 @@ class ConvertKit_PMP_Admin {
 				?>
 				<option value="<?php echo $value; ?>" <?php selected( $tag, $value ); ?>><?php echo $text; ?></option><?php
 			}
-			?></select><?php
+			?></select><?php			
+			if ( $args['key'] === 0 ) {
+				printf( "<p class='description'><small>%s</small></p>", esc_html( "This tag will be assigned when a member's level is removed.", "convertkit-pmp" ) );
+			}
 		}
 
 	}
@@ -471,7 +486,7 @@ class ConvertKit_PMP_Admin {
 				if ( ! empty( $tag_id_to_add ) ) {
 					$new_tags[] = $tag_id_to_add;
 				}
-			}
+			}			
 
 			// Remove duplicates in the array of new and old tags.
 			$new_tags = array_unique( $new_tags );		
@@ -485,6 +500,30 @@ class ConvertKit_PMP_Admin {
 			$user = get_userdata( $user_id );
 			$user_email = $user->user_email;
 			$user_name = $user->first_name . ' ' . $user->last_name;
+
+			/**
+			 * No new levels so we're assuming they're cancelling. 
+			 * We'll add a 'Non-member' tag to the subscriber and remove it if they become a member again
+			 */
+
+			if( empty( $new_tags ) ) {
+
+				$non_members_tag = $this->get_option( 'convertkit-mapping-0' );
+
+				if( !empty( $non_members_tag ) ) {
+					$subscribe_tags[] = $non_members_tag;
+				}
+
+			} else {
+
+				//We're signing up for a new level, make sure the non-member tag is removed
+				$non_members_tag = $this->get_option( 'convertkit-mapping-0' );
+				if( !empty( $non_members_tag ) ) {
+					$api_secret_key = $this->get_option( 'api-secret-key' );
+					$this->api->remove_tag_from_user( $user_email, $api_secret_key, $non_members_tag );
+				}
+				
+			}
 
 			/**
 			 * Allow custom code to filter the subscribe tags for the user by email.
