@@ -48,6 +48,7 @@ Yes, for it to work you must first have an account on ConvertKit.com
 * ENHANCEMENT: Added filter `pmpro_convertkit_unsubscribe_tags` to allow adjusting of what tags are removed when a user is unsubscribed.
 * ENHANCEMENT: Added a log file when 'CK_DEBUG' is defined. Filter the location where the log file is stored by using the `pmprock_logfile` filter.
 * ENHANCEMENT: Updated UI slightly to show/hide the option "Require Opt-In Label" based on the required "Require Opt-In" checkbox field.
+* ENHANCEMENT: Sync member information to ConvertKit data whenever the member's email or first name is changed via the WordPress dashboard.
 * REFACTOR: Refactored various methods to improve stability of storing ConvertKit meta data.
 
 = 1.1 - 2021-06-21 =
