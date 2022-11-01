@@ -1,8 +1,8 @@
 === Paid Memberships Pro - ConvertKit Integration ===
-Contributors: strangerstudios, kimannwall, nathanbarry, growdev
+Contributors: strangerstudios, kimannwall, nathanbarry, growdev, paidmembershipspro
 Tags: convertkit, email, marketing, pmpro, pmp, paid memberships pro
 Requires at least: 5.0
-Tested up to: 6.0
+Tested up to: 6.1
 Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
