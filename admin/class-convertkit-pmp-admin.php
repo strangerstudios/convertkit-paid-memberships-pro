@@ -301,7 +301,7 @@ class ConvertKit_PMP_Admin {
 		$api_key = $this->get_option( 'api-key' );
 
 		?><input type="text" id="<?php echo $this->plugin_name; ?>-options[api-key]" name="<?php echo $this->plugin_name; ?>-options[api-key]" value="<?php echo esc_attr( $api_key ); ?>" size="40" /><br/>
-		<p class="description"><?php echo __( 'This field is required to add and tag subscribers in ConvertKit.', 'convertkit-pmp' ); ?> <a href="https://app.convertkit.com/account/edit" target="_blank"><?php echo __( 'Get your ConvertKit API Key', 'convertkit-pmp' ); ?></a></p><?php
+		<p class="description"><?php echo __( 'This field is required to add and tag subscribers in ConvertKit.', 'convertkit-pmp' ); ?> <a href="https://app.convertkit.com/account_settings/advanced_settings" target="_blank"><?php echo __( 'Get your ConvertKit API Key', 'convertkit-pmp' ); ?></a></p><?php
 	}
 
 
@@ -315,7 +315,7 @@ class ConvertKit_PMP_Admin {
 		$api_secret_key = $this->get_option( 'api-secret-key' );
 
 		?><input type="text" id="<?php echo $this->plugin_name; ?>-options[api-secret-key]" name="<?php echo $this->plugin_name; ?>-options[api-secret-key]" value="<?php echo esc_attr( $api_secret_key ); ?>" size="40" />
-		<p class="description"><?php echo __( 'This field is required to add purchase data to subscribers in ConvertKit.', 'convertkit-pmp' ); ?> <a href="https://app.convertkit.com/account/edit" target="_blank"><?php echo __( 'Get your ConvertKit API Secret Key', 'convertkit-pmp' ); ?></a></p><?php
+		<p class="description"><?php echo __( 'This field is required to add purchase data to subscribers in ConvertKit.', 'convertkit-pmp' ); ?> <a href="https://app.convertkit.com/account_settings/advanced_settings" target="_blank"><?php echo __( 'Get your ConvertKit API Secret Key', 'convertkit-pmp' ); ?></a></p><?php
 	}
 
 
