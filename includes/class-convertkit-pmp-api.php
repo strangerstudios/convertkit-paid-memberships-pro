@@ -95,8 +95,8 @@ class ConvertKit_PMP_API {
 			}
 
 		}
-
-		if ( ! empty( $tags ) && empty( $tags->error ) ) {
+		// Check if $tags is a non-empty array and there's no error
+		if ( is_array( $tags ) && ! empty( $tags ) && empty( $tags->error ) ) {
 			foreach( $tags as $key => $tag ) {
 				$this->tags[ $tag->id ] = $tag->name;
 			}
