@@ -687,6 +687,16 @@ class ConvertKit_PMP_Admin {
 			return;		
 		}
 
+		/**
+		 * Filter to disable creating a purchase in ConvertKit for this order.
+		 *
+		 * @since TBD
+		 * @param bool $disable_create_purchase Set to true to disable creating a purchase in ConvertKit for this order.
+		 */
+		if ( apply_filters( 'pmpro_convertkit_disable_create_purchase', false, $order ) ) {
+			return;
+		}
+
 		// Send order details to ConvertKit if opt-in not required or if the user has agreed.
 		if ( empty( $require_opt_in ) || ( ! empty( $require_opt_in ) && ! empty( $_REQUEST['convertkit_pmp_require_opt_in'] ) ) ) {
 
