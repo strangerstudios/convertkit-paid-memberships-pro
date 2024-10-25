@@ -519,7 +519,9 @@ class ConvertKit_PMP_Admin {
 			// Get the subscriber information.
 			$user = get_userdata( $user_id );
 			$user_email = $user->user_email;
-			$user_name = $user->first_name . ' ' . $user->last_name;
+
+			// Set the user's first name to the user's first name if available, otherwise use the user's display name.
+			$user_name = isset( $user->first_name ) ? $user->first_name : $user->display_name;
 
 			/**
 			 * No new levels so we're assuming they're cancelling. 
