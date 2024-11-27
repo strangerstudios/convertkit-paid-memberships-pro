@@ -708,46 +708,54 @@ class ConvertKit_PMP_Admin {
 		}
 	}
 
-	/**		
- 	 * Updates a subscriber's details upon updating a user profile in wp-admin		
- 	 *		
- 	 * @access public		
- 	 * @since 1.2.0		
- 	 * @return void		
- 	 */		
- 	public function update_profile( $user_id ) {	
+	/**
+ 	 * Updates a subscriber's details on profile update.
+ 	 *
+ 	 * @access public
+ 	 * @since 1.2.0
+ 	 * @return void
+ 	 */
+ 	public function update_profile( $user_id, $old_user_data ) {
+		$new_user_data = get_userdata( $user_id );
 
-	 	if ( current_user_can( 'edit_user', $user_id ) ) {
+		// By default only update users if their email has changed.
+		$email_changed = ( $new_user_data->user_email != $old_user_data->user_email );
+		$update_user = $email_changed;
 
-			$user_id = isset( $_REQUEST['user_id'] ) ? intval( $_REQUEST['user_id'] ) : 0;
+		/**
+		 * Filter in case they want to update the user on all updates
+		 *
+		 * @param bool $update_user true or false if user should be updated at Kit
+		 * @param int $user_id ID of user in question
+		 * @param object $old_user_data old data from before this profile update
+		 *
+		 * @since TBD
+		 */
+		$update_user = apply_filters( 'pmpro_kit_update_profile', $update_user, $user_id, $old_user_data );
 
-			if ( ! empty( $user_id ) ) {
+		if ( $update_user ) {
 
-				$user_email = isset( $_REQUEST['email'] ) ? sanitize_email( $_REQUEST['email'] ) : '';
-				$first_name = isset( $_REQUEST['first_name'] ) ? sanitize_text_field( $_REQUEST['first_name'] ) : '';
+			$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', true );
 
-				$subscriber_id = get_user_meta( $user_id, 'pmprock_subscriber_id', true );
+			$subscriber_info = array(
+				'email_address' 	=> $new_user_data->user_email,
+				'first_name' 		=> $new_user_data->first_name,
+				'user_id'			=> $user_id
+			);
 
-				$subscriber_info = array(
-					'email_address' 	=> $user_email,
-					'first_name' 		=> $first_name,
-					'user_id'			=> $user_id
-				);
+			/**
+			 * Filter the subscriber data to add custom fields
+			 *
+			 * @param array $subscriber_info The array containing the subscriber data
+			 */
+			$subscriber_info = apply_filters( 'pmprock_subscriber_update_data', $subscriber_info );
 
-				/**
-				 * Filter the subscriber data to add custom fields 
-				 * 
-				 * @param array $subscriber_info The array containing the subscriber data
-				 */
-				$subscriber_info = apply_filters( 'pmprock_subscriber_update_data', $subscriber_info );
+			// Get the secret API key.
+			$api_secret_key = $this->get_option( 'api-secret-key' );
 
-				// Get the secret API key.
-				$api_secret_key = $this->get_option( 'api-secret-key' );
+			$this->api->update_subscriber( $subscriber_id, $api_secret_key, $subscriber_info );
 
-				$this->api->update_subscriber( $subscriber_id, $api_secret_key, $subscriber_info );
-			}
-
-	 	}
+		}
 
 	}
 
