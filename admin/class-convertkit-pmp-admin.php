@@ -88,9 +88,13 @@ class ConvertKit_PMP_Admin {
 		// add_settings_section( $id, $title, $callback, $menu_slug );
 		add_settings_section(
 			$this->plugin_name . '-display-options',
-			apply_filters( $this->plugin_name . '-display-section-title', __( 'General', 'convertkit-pmp' ) ),
+			'',
 			array( $this, 'display_options_section' ),
-			$this->plugin_name
+			$this->plugin_name,
+			array(
+				'before_section' => '<div class="pmpro_section">',
+				'after_section' => '</div></div>',
+			)
 		);
 
 		// add_settings_field( $id, $title, $callback, $menu_slug, $section, $args );
@@ -134,9 +138,13 @@ class ConvertKit_PMP_Admin {
 		// add_settings_section( $id, $title, $callback, $menu_slug );
 		add_settings_section(
 			$this->plugin_name . '-ck-mapping',
-			apply_filters( $this->plugin_name . '-display-mapping-title', __( 'Assign Tags', 'convertkit-pmp' ) ),
+			'',
 			array( $this, 'display_mapping_section' ),
-			$this->plugin_name
+			$this->plugin_name,
+			array(
+				'before_section' => '<div class="pmpro_section">',
+				'after_section' => '</div></div>',
+			)
 		);
 
 		// Get all PMP membership levels
@@ -212,13 +220,13 @@ class ConvertKit_PMP_Admin {
 	 * @return 		void
 	 */
 	public function add_menu() {
-		// add_options_page( $page_title, $menu_title, $capability, $menu_slug, $callback );
-		add_options_page(
-			apply_filters( $this->plugin_name . '-settings-page-title', __( 'Paid Memberships Pro - ConvertKit Settings', 'convertkit-pmp' ) ),
+		add_submenu_page(
+			'pmpro-dashboard',
+			apply_filters( $this->plugin_name . '-settings-page-title', __( 'ConvertKit', 'convertkit-pmp' ) ),
 			apply_filters( $this->plugin_name . '-settings-menu-title', __( 'PMPro ConvertKit', 'convertkit-pmp' ) ),
 			'manage_options',
-			$this->plugin_name,
-			array( $this, 'options_page' )
+			'pmpro-convertkit',
+			array( $this, 'render_adminpage' )
 		);
 	}
 
@@ -228,13 +236,19 @@ class ConvertKit_PMP_Admin {
 	 * @since 		1.0.0
 	 * @return 		void
 	 */
-	public function options_page() {
-		?><div class="wrap"><h1><?php echo esc_html( get_admin_page_title() ); ?></h1></div>
-		<form action="options.php" method="post"><?php
-		settings_fields( 'convertkit-pmp-options' );
-		do_settings_sections( $this->plugin_name );
-		submit_button( 'Save Settings' );
-		?></form><?php
+	public function render_adminpage() {
+		?>
+		<div class="wrap pmpro_admin pmpro_admin-pmpro-mailpoet">
+			<h1><?php esc_html_e( 'ConvertKit Integration Settings', 'convertkit-pmp' ); ?></h1>
+			<form action="options.php" method="post">
+				<?php
+					settings_fields( 'convertkit-pmp-options' );
+					do_settings_sections( $this->plugin_name );
+					submit_button( 'Save Settings' );
+				?>
+			</form>
+		</div>
+		<?php
 	}
 
 
@@ -260,7 +274,16 @@ class ConvertKit_PMP_Admin {
 	 * @return 		mixed 						The settings section
 	 */
 	public function display_options_section( $params ) {
-		echo '<p>' . __( 'Add your API keys below to connect your ConvertKit account to this membership site.','convertkit-pmp') .'</p>';
+		?>
+		<div id="pmpro-convertkit-general-settings" class="pmpro_section_toggle" data-visibility="hidden" data-activated="false">
+			<button class="pmpro_section-toggle-button" type="button" aria-expanded="false">
+				<span class="dashicons dashicons-arrow-up-alt2"></span>
+				<?php esc_html_e( 'General Settings', 'convertkit-pmp' ); ?>
+			</button>
+		</div>
+		<div class="pmpro_section_inside">
+			<p><?php esc_html_e( 'Add your API keys below to connect your ConvertKit account to this membership site.','convertkit-pmp'); ?></p>
+		<?php
 	}
 
 
@@ -272,7 +295,16 @@ class ConvertKit_PMP_Admin {
 	 * @return 		mixed 						The settings section
 	 */
 	public function display_mapping_section( $params ) {
-		echo '<p>' . __( 'Below is a list of the defined Membership Levels in Paid Memberships Pro. Assign a membership level to a ConvertKit tag that will be assigned to members of that level.','convertkit-pmp') .'</p>';
+		?>
+		<div id="pmpro-convertkit-tag-settings" class="pmpro_section_toggle" data-visibility="hidden" data-activated="false">
+			<button class="pmpro_section-toggle-button" type="button" aria-expanded="false">
+				<span class="dashicons dashicons-arrow-up-alt2"></span>
+				<?php esc_html_e( 'Assign Tags', 'convertkit-pmp' ); ?>
+			</button>
+		</div>
+		<div class="pmpro_section_inside">
+			<p><?php esc_html_e( 'Below is a list of the defined Membership Levels in Paid Memberships Pro. Assign a membership level to a ConvertKit tag that will be assigned to members of that level.','convertkit-pmp'); ?></p>
+		<?php
 	}
 
 
@@ -284,8 +316,12 @@ class ConvertKit_PMP_Admin {
 	 * @return 		array 					The modified array of links
 	 */
 	public function settings_link( $links ) {
-
-		$settings_link = sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=' . $this->plugin_name ), __( 'Settings', 'convertkit-pmp' ) );
+		/* translators: %1$s is a link to the settings page, %2$s is the text "Settings" */
+		$settings_link = sprintf(
+			'<a href="%1$s">%2$s</a>',
+			get_admin_url( null, 'admin.php?page=pmpro-convertkit' ),
+			__( 'Settings', 'convertkit-pmp' )
+		);
 		array_unshift( $links, $settings_link );
 		return $links;
 	}
