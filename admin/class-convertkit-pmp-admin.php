@@ -688,12 +688,12 @@ class ConvertKit_PMP_Admin {
 		}
 
 		/**
-		 * Filter to disable creating a purchase in ConvertKit for this order.
+		 * Filter whether to create a purchase in ConvertKit for this order.
 		 *
 		 * @since TBD
-		 * @param bool $disable_create_purchase Set to true to disable creating a purchase in ConvertKit for this order.
+		 * @param bool $create_purchase Set to false to disable creating a purchase in ConvertKit for this order.
 		 */
-		if ( apply_filters( 'pmpro_convertkit_disable_create_purchase', false, $order ) ) {
+		if ( ! apply_filters( 'pmpro_convertkit_create_purchase', true, $order ) ) {
 			return;
 		}
 
