@@ -521,7 +521,7 @@ class ConvertKit_PMP_Admin {
 			$user_email = $user->user_email;
 
 			// Set the user's first name to the user's first name if available, otherwise use the user's display name.
-			$user_name = isset( $user->first_name ) ? $user->first_name : $user->display_name;
+			$user_name = empty( $user->first_name ) ? $user->display_name : $user->first_name;
 
 			/**
 			 * No new levels so we're assuming they're cancelling. 
