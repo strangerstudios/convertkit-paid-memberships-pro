@@ -676,16 +676,18 @@ class ConvertKit_PMP_Admin {
 		// Set a default value of the opt-in label on checkout.
 		if ( empty( $require_opt_in_label ) ) {
 			$require_opt_in_label = 'Get our newsletter for membership updates and information.';
-		} ?>
-		<div id="pmpro_checkout_box-convertkit-require-opt-in" class="pmpro_checkout" <?php echo( $display_modifier ); ?>>
-			<hr />
-			<div class="pmpro_checkout-fields">
-				<div class="pmpro_checkout-field pmpro_checkout-field-checkbox pmpro_checkout-field-convertkit-pmp-require-opt-in">
-					<input type="checkbox" id="convertkit_pmp_require_opt_in" name="convertkit_pmp_require_opt_in" value="yes" />
-					<label for="convertkit_pmp_require_opt_in"><?php esc_html_e( $require_opt_in_label ); ?></label>
-				</div> <!-- end pmpro_checkout-field -->
-			</div> <!-- end pmpro_checkout-fields -->
-		</div> <!-- end pmpro_checkout_box-name -->
+		}
+		?>
+		<fieldset id="pmpro_convertkit_require_opt_in" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fieldset', 'pmpro_convertkit_require_opt_in' ) ); ?>">
+			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields' ) ); ?>">
+				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-checkbox' ) ); ?>">
+					<label class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label pmpro_clickable', 'convertkit_pmp_require_opt_in' ) ); ?>" for="convertkit_pmp_require_opt_in">
+						<input type="checkbox" name="convertkit_pmp_require_opt_in" value="1" id="convertkit_pmp_require_opt_in" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-checkbox', 'convertkit_pmp_require_opt_in' ) ); ?>" />
+						<?php esc_html_e( $require_opt_in_label ); ?>
+					</label>
+				</div>
+			</div>
+		</fieldset>
 		<?php
 	}
 
