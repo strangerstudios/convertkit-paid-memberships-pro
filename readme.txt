@@ -44,7 +44,7 @@ Yes, for it to work you must first have an account on ConvertKit.com
 = 1.2.1 - 2024-12-20 =
 * ENHANCEMENT: Updated the settings page link to be under "Memberships" and the settings page UI. #25 (@kimcoleman)
 * ENHANCEMENT: Updated the checkout page styling for compatibility with PMPro v3.1+. #31 (@kimcoleman)
-* ENHANCEMENT: Added a new filter `pmpro_convertkit_disable_create_purchase` to disable tracking purchases. #26 (@kimcoleman)
+* ENHANCEMENT: Added a new filter `pmpro_convertkit_create_purchase` to disable tracking purchases. #26 (@kimcoleman)
 * ENHANCEMENT: Improved the logic around updating ConvertKit subscriber after a user profile is updated. #30 (@kimcoleman)
 * ENHANCEMENT: Added a new filter `pmpro_kit_update_profile` to allow updating ConvertKit subscribers after every profile save. #30 (@kimcoleman)
 * BUG FIX/ENHANCEMENT: Now sending a user's display name to ConvertKit if the first name is not set. #27 (@kimcoleman)
