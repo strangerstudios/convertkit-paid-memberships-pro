@@ -150,7 +150,7 @@ class ConvertKit_PMP {
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
 		$this->loader->add_action( 'updated_option', $plugin_admin, 'updated_options', 10, 3 );
 		$this->loader->add_action( 'pmpro_after_all_membership_level_changes', $plugin_admin, 'after_all_membership_level_changes', 10, 3 );
-		$this->loader->add_action( 'pmpro_checkout_before_submit_button', $plugin_admin, 'after_tos_fields', 6, 1 ); // 5 to show before recaptcha but after TOS.
+		$this->loader->add_action( 'pmpro_checkout_boxes', $plugin_admin, 'checkout_boxes', 15, 1 );
 		$this->loader->add_action( 'pmpro_paypalexpress_session_vars', $plugin_admin, 'paypalexpress_session_vars', 10, 1 );
 		$this->loader->add_action( 'pmpro_after_checkout', $plugin_admin, 'after_checkout', 10, 2 );
 		$this->loader->add_action( 'profile_update', $plugin_admin, 'update_profile', 10, 2 );
