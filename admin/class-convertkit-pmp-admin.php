@@ -739,7 +739,7 @@ class ConvertKit_PMP_Admin {
 		/**
 		 * Filter whether to create a purchase in ConvertKit for this order.
 		 *
-		 * @since TBD
+		 * @since 1.2.1
 		 * @param bool $create_purchase Set to false to disable creating a purchase in ConvertKit for this order.
 		 */
 		if ( ! apply_filters( 'pmpro_convertkit_create_purchase', true, $order ) ) {
@@ -788,7 +788,7 @@ class ConvertKit_PMP_Admin {
 		 * @param int $user_id ID of user in question
 		 * @param object $old_user_data old data from before this profile update
 		 *
-		 * @since TBD
+		 * @since 1.2.1
 		 */
 		$update_user = apply_filters( 'pmpro_kit_update_profile', $update_user, $user_id, $old_user_data );
 

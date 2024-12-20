@@ -3,7 +3,7 @@ Contributors: strangerstudios, kimannwall, nathanbarry, growdev, paidmemberships
 Tags: convertkit, email, marketing, pmpro, pmp, paid memberships pro
 Requires at least: 5.2
 Tested up to: 6.5
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,16 @@ Yes, for it to work you must first have an account on ConvertKit.com
 2. Example ConvertKit Subscriber with Purchase data for their initial membership checkout order.
 
 == Changelog ==
+= 1.2.1 - 2024-12-20 =
+* ENHANCEMENT: Updated the settings page link to be under "Memberships" and the settings page UI. #25 (@kimcoleman)
+* ENHANCEMENT: Updated the checkout page styling for compatibility with PMPro v3.1+. #31 (@kimcoleman)
+* ENHANCEMENT: Added a new filter `pmpro_convertkit_disable_create_purchase` to disable tracking purchases. #26 (@kimcoleman)
+* ENHANCEMENT: Improved the logic around updating ConvertKit subscriber after a user profile is updated. #30 (@kimcoleman)
+* ENHANCEMENT: Added a new filter `pmpro_kit_update_profile` to allow updating ConvertKit subscribers after every profile save. #30 (@kimcoleman)
+* BUG FIX/ENHANCEMENT: Now sending a user's display name to ConvertKit if the first name is not set. #27 (@kimcoleman)
+* BUG FIX: Fixed outdated link to retrieve ConvertKit API key. #20 (@JarrydLong)
+* BUG FIX: Fixed a PHP error when no tags are present in ConvertKit. #21 (@JarrydLong)
+
 = 1.2 - 2022-06-09 =
 * FEATURE: Added tag settings for non-members. This will apply a tag when a member's membership level is removed - when a member signs up for a level it will remove these non-member tags in ConvertKit.
 * ENHANCEMENT: Added filter `pmpro_convertkit_subscribe_fields` to allow passing custom fields to ConvertKit when tagging a member.
