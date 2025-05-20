@@ -436,32 +436,42 @@ class ConvertKit_PMP_Admin {
 	 */
 	public function display_options_convertkit_mapping( $args ) {
 
-		$option_name 	= 'convertkit-mapping-' . $args['key'];
-		$tag         	= $this->get_option( $option_name );
-		$api_key     	= $this->get_option( 'api-key' );
+		$option_name = 'convertkit-mapping-' . $args['key'];
+		$tag         = $this->get_option( $option_name );
+		$api_key     = $this->get_option( 'api-key' );
 
 		if ( empty( $api_key ) ) {
-			?><p><?php echo __( 'Enter API key to retrieve list of tags.', 'convertkit-pmp' ); ?></p><?php
-		} elseif( is_null( $args['tags'] ) ) {
-			?><p><?php echo __( 'No tags were returned from ConvertKit.', 'convertkit-pmp' ); ?></p><?php
+			?>
+			<p><?php esc_html_e( 'Enter API key to retrieve list of tags.', 'convertkit-pmp' ); ?></p>
+			<?php
+		} elseif ( is_null( $args['tags'] ) ) {
+			?>
+			<p><?php esc_html_e( 'No tags were returned from ConvertKit.', 'convertkit-pmp' ); ?></p>
+			<?php
 		} else {
-
-			?><select id="<?php echo $this->plugin_name; ?>-options[<?php echo $option_name ?>]"
-			          name="<?php echo $this->plugin_name; ?>-options[<?php echo $option_name ?>]"><?php
+			?>
+			<select id="<?php echo esc_attr( $this->plugin_name . '-options[' . $option_name . ']' ); ?>"
+				name="<?php echo esc_attr( $this->plugin_name . '-options[' . $option_name . ']' ); ?>">
+			<?php
 			if ( empty( $tag ) ) {
 				?>
-				<option value=""><?php echo __( 'Select a tag', 'convertkit-pmp' ); ?></option><?php
+				<option value=""><?php esc_html_e( 'Select a tag', 'convertkit-pmp' ); ?></option>
+				<?php
 			}
+			// Sort the tags.
+			asort( $args['tags'] );
 			foreach ( $args['tags'] as $value => $text ) {
 				?>
-				<option value="<?php echo $value; ?>" <?php selected( $tag, $value ); ?>><?php echo $text; ?></option><?php
+				<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $tag, $value ); ?>><?php echo esc_html( $text ); ?></option>
+				<?php
 			}
-			?></select><?php			
-			if ( $args['key'] === 0 ) {
-				printf( "<p class='description'><small>%s</small></p>", esc_html( "This tag will be assigned when a member's level is removed.", "convertkit-pmp" ) );
+			?>
+			</select>
+			<?php
+			if ( 0 === $args['key'] ) {
+				printf( "<p class='description'><small>%s</small></p>", esc_html__( "This tag will be assigned when a member's level is removed.", 'convertkit-pmp' ) );
 			}
 		}
-
 	}
 
 	/**
